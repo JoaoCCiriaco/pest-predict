@@ -123,5 +123,43 @@ def editar_cliente(id):
     )
 
 
+@app.route("/caixas", methods=["GET", "POST"])
+def caixas():
+
+    conexao = conectar_banco()
+
+    if request.method == "POST":
+
+        cliente_id = request.form["cliente_id"]
+        local = request.form["local"]
+        status = request.form["status"]
+
+        conexao.execute(
+            """
+            INSERT INTO caixas (cliente_id, local, status)
+            VALUES (?, ?, ?)
+            """,
+            (cliente_id, local, status)
+        )
+
+        conexao.commit()
+
+        conexao.close()
+
+        return redirect("/caixas")
+
+    clientes = conexao.execute(
+        "SELECT * FROM clientes"
+    ).fetchall()
+
+    conexao.close()
+
+    return render_template(
+        "caixas.html",
+        clientes=clientes
+    )
+
+
 if __name__ == "__main__":
     app.run(debug=True)
+

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Caixas - Soluinsect</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Cadastrar Caixa</h1>
+
+        <p>Cadastre uma nova caixa de monitoramento.</p>
+
+        <br>
+
+        <form action="/caixas" method="POST">
+
+            <label for="cliente_id">Cliente:</label>
+
+            <select id="cliente_id" name="cliente_id" required>
+
+                <option value="">Selecione um cliente</option>
+
+                {% for cliente in clientes %}
+
+                    <option value="{{ cliente['id'] }}">
+                        {{ cliente['nome'] }}
+                    </option>
+
+                {% endfor %}
+
+            </select>
+
+            <br><br>
+
+            <label for="local">Local da caixa:</label>
+
+            <input
+                type="text"
+                id="local"
+                name="local"
+                placeholder="Ex: Cozinha"
+                required
+            >
+
+            <br><br>
+
+            <label for="status">Status:</label>
+
+            <select id="status" name="status">
+
+                <option value="Ativa">Ativa</option>
+
+                <option value="Inativa">Inativa</option>
+
+            </select>
+
+            <br><br>
+
+            <button type="submit">
+                Cadastrar Caixa
+            </button>
+
+        </form>
+
+        <br>
+
+        <a href="/">
+            <button>Voltar ao Dashboard</button>
+        </a>
+
+    </div>
+
+</body>
+
+</html>
