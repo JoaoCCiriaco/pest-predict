@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Dashboard - Soluinsect</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Soluinsect</h1>
+
+        <p>Sistema de Controle de Pragas</p>
+
+        <h2>Painel de Controle</h2>
+
+        <div class="cards">
+
+            <!-- CLIENTES -->
+
+            <div class="card">
+
+                <h3>👥 Clientes</h3>
+
+                <p>{{ clientes|length }}</p>
+
+                <a href="/lista-clientes">
+                    <button>Ver Clientes</button>
+                </a>
+
+            </div>
+
+
+            <!-- CAIXAS -->
+
+            <div class="card">
+
+                <h3>📦 Caixas</h3>
+
+                <p>0</p>
+
+                <button>Ver Caixas</button>
+
+            </div>
+
+
+            <!-- INSPEÇÕES -->
+
+            <div class="card">
+
+                <h3>🔍 Inspeções</h3>
+
+                <p>0</p>
+
+                <button>Ver Inspeções</button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

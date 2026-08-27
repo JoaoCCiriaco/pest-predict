@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Clientes - Soluinsect</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Clientes</h1>
+
+        <p>Clientes cadastrados no sistema</p>
+
+        <br>
+
+        <a href="/clientes">
+            <button>Novo Cliente</button>
+        </a>
+
+        <br><br>
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Telefone</th>
+                    <th>E-mail</th>
+                    <th>Ações</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for cliente in clientes %}
+
+                <tr>
+
+                    <td>{{ cliente["id"] }}</td>
+
+                    <td>{{ cliente["nome"] }}</td>
+
+                    <td>{{ cliente["telefone"] }}</td>
+
+                    <td>{{ cliente["email"] }}</td>
+
+                    <td>
+
+                        <a href="/editar-cliente/{{ cliente['id'] }}">
+                            <button>Editar</button>
+                        </a>
+
+                        <a href="/excluir-cliente/{{ cliente['id'] }}">
+                            <button>Excluir</button>
+                        </a>
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</body>
+
+</html>
