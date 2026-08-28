@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Caixas - Soluinsect</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>Caixas</h1>
+
+        <p>Caixas de monitoramento cadastradas</p>
+
+        <br>
+
+        <a href="/caixas">
+            <button>Nova Caixa</button>
+        </a>
+
+        <br><br>
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>ID</th>
+                    <th>Cliente</th>
+                    <th>Local</th>
+                    <th>Status</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for caixa in caixas %}
+
+                <tr>
+
+                    <td>{{ caixa["id"] }}</td>
+
+                    <td>{{ caixa["cliente_nome"] }}</td>
+
+                    <td>{{ caixa["local"] }}</td>
+
+                    <td>{{ caixa["status"] }}</td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</body>
+
+</html>
