@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Nova Inspeção - Soluinsect</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            color: #222;
+        }
+
+        /* MENU */
+
+        nav {
+            background: #111827;
+            padding: 15px 40px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+        }
+
+        .logo {
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .menu {
+            display: flex;
+            gap: 20px;
+        }
+
+        .menu a {
+            color: #d1d5db;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .menu a:hover {
+            color: white;
+        }
+
+        /* CONTAINER */
+
+        .container {
+            max-width: 700px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        /* FORMULÁRIO */
+
+        .formulario {
+            background: white;
+            padding: 30px;
+
+            border-radius: 12px;
+
+            box-shadow:
+                0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        h1 {
+            margin-top: 0;
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+
+            margin-bottom: 8px;
+
+            font-weight: bold;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+
+            padding: 12px;
+
+            margin-bottom: 20px;
+
+            border: 1px solid #d1d5db;
+
+            border-radius: 8px;
+
+            font-size: 15px;
+        }
+
+        textarea {
+            min-height: 120px;
+
+            resize: vertical;
+        }
+
+        button {
+            width: 100%;
+
+            padding: 13px;
+
+            border: none;
+
+            border-radius: 8px;
+
+            background: #2563eb;
+
+            color: white;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+        button:hover {
+            opacity: 0.9;
+        }
+
+        .voltar {
+            display: inline-block;
+
+            margin-top: 20px;
+
+            color: #2563eb;
+
+            text-decoration: none;
+
+            font-weight: bold;
+        }
+
+        /* CELULAR */
+
+        @media (max-width: 600px) {
+
+            nav {
+                padding: 15px 20px;
+
+                flex-direction: column;
+
+                gap: 15px;
+            }
+
+            .menu {
+                gap: 12px;
+            }
+
+            .container {
+                margin-top: 25px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- MENU -->
+
+    <nav>
+
+        <a href="/" class="logo">
+            SOLUINSECT
+        </a>
+
+        <div class="menu">
+
+            <a href="/">
+                🏠 Início
+            </a>
+
+            <a href="/lista-clientes">
+                👥 Clientes
+            </a>
+
+            <a href="/lista-caixas">
+                📦 Caixas
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- CONTEÚDO -->
+
+    <main class="container">
+
+        <div class="formulario">
+
+            <h1>
+                Nova Inspeção
+            </h1>
+
+
+            <form method="POST">
+
+
+                <label for="caixa_id">
+                    Caixa
+                </label>
+
+                <select
+                    name="caixa_id"
+                    id="caixa_id"
+                    required
+                >
+
+                    <option value="">
+                        Selecione uma caixa
+                    </option>
+
+                    {% for caixa in caixas %}
+
+                    <option value="{{ caixa.id }}">
+
+                        Caixa {{ caixa.id }}
+                        -
+                        {{ caixa.cliente_nome }}
+                        -
+                        {{ caixa.local }}
+
+                    </option>
+
+                    {% endfor %}
+
+                </select>
+
+
+                <label for="data">
+                    Data da inspeção
+                </label>
+
+                <input
+                    type="date"
+                    name="data"
+                    id="data"
+                    required
+                >
+
+
+                <label for="consumo">
+                    Houve consumo da isca?
+                </label>
+
+                <select
+                    name="consumo"
+                    id="consumo"
+                    required
+                >
+
+                    <option value="">
+                        Selecione
+                    </option>
+
+                    <option value="Sim">
+                        Sim
+                    </option>
+
+                    <option value="Não">
+                        Não
+                    </option>
+
+                </select>
+
+
+                <label for="observacao">
+                    Observação
+                </label>
+
+                <textarea
+                    name="observacao"
+                    id="observacao"
+                    placeholder="Digite alguma observação sobre a inspeção..."
+                ></textarea>
+
+
+                <button type="submit">
+                    Registrar Inspeção
+                </button>
+
+            </form>
+
+
+            <a
+                href="/lista-caixas"
+                class="voltar"
+            >
+                ← Voltar para caixas
+            </a>
+
+        </div>
+
+    </main>
+
+
+</body>
+
+</html>

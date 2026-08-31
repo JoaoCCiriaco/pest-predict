@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Editar Caixa</title>
+</head>
+
+<body>
+
+    <h1>Editar Caixa</h1>
+
+    <form method="POST">
+
+        <label for="cliente_id">Cliente:</label>
+        <br>
+
+        <select name="cliente_id" id="cliente_id" required>
+
+            {% for cliente in clientes %}
+
+                <option
+                    value="{{ cliente.id }}"
+                    {% if cliente.id == caixa.cliente_id %}selected{% endif %}
+                >
+                    {{ cliente.nome }}
+                </option>
+
+            {% endfor %}
+
+        </select>
+
+        <br><br>
+
+        <label for="local">Local:</label>
+        <br>
+
+        <input
+            type="text"
+            name="local"
+            id="local"
+            value="{{ caixa.local }}"
+            required
+        >
+
+        <br><br>
+
+        <label for="status">Status:</label>
+        <br>
+
+        <select name="status" id="status" required>
+
+            <option
+                value="Ativa"
+                {% if caixa.status == "Ativa" %}selected{% endif %}
+            >
+                Ativa
+            </option>
+
+            <option
+                value="Inativa"
+                {% if caixa.status == "Inativa" %}selected{% endif %}
+            >
+                Inativa
+            </option>
+
+        </select>
+
+        <br><br>
+
+        <button type="submit">
+            Salvar alterações
+        </button>
+
+    </form>
+
+    <br>
+
+    <a href="/lista-caixas">
+        Voltar para lista de caixas
+    </a>
+
+</body>
+</html>
