@@ -1,3 +1,4 @@
+```python
 from flask import Flask, render_template, request, redirect
 import sqlite3
 
@@ -431,8 +432,59 @@ def historico_caixa(id):
     )
 
 
+@app.route("/editar-inspecao/<int:id>", methods=["GET", "POST"])
+def editar_inspecao(id):
+
+    conexao = conectar_banco()
+
+    inspecao = conexao.execute(
+        """
+        SELECT *
+        FROM inspecoes
+        WHERE id = ?
+        """,
+        (id,)
+    ).fetchone()
+
+    if inspecao is None:
+
+        conexao.close()
+
+        return "Inspeção não encontrada"
+
+    if request.method == "POST":
+
+        data = request.form["data"]
+        consumo = request.form["consumo"]
+        observacao = request.form["observacao"]
+
+        conexao.execute(
+            """
+            UPDATE inspecoes
+            SET data = ?, consumo = ?, observacao = ?
+            WHERE id = ?
+            """,
+            (data, consumo, observacao, id)
+        )
+
+        conexao.commit()
+        conexao.close()
+
+        return redirect(
+            f"/historico-caixa/{inspecao['caixa_id']}"
+        )
+
+    conexao.close()
+
+    return render_template(
+        "editar_inspecao.html",
+        inspecao=inspecao
+    )
+
+
 if __name__ == "__main__":
 
     criar_tabela_inspecoes()
 
     app.run(debug=True)
+```

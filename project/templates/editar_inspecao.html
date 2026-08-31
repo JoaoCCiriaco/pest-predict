@@ -1,0 +1,174 @@
+```html
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Editar Inspeção</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            margin: 0;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        h1 {
+            margin-top: 0;
+        }
+
+        label {
+            display: block;
+            margin-top: 18px;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 15px;
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .botoes {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        button,
+        .cancelar {
+            padding: 11px 18px;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        button {
+            background: #198754;
+            color: white;
+        }
+
+        button:hover {
+            background: #157347;
+        }
+
+        .cancelar {
+            background: #6c757d;
+            color: white;
+        }
+
+        .cancelar:hover {
+            background: #5c636a;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>✏️ Editar Inspeção</h1>
+
+        <form method="POST">
+
+            <label for="data">
+                Data
+            </label>
+
+            <input
+                type="date"
+                id="data"
+                name="data"
+                value="{{ inspecao.data }}"
+                required
+            >
+
+            <label for="consumo">
+                Consumo da isca
+            </label>
+
+            <select
+                id="consumo"
+                name="consumo"
+                required
+            >
+
+                <option
+                    value="Sim"
+                    {% if inspecao.consumo == "Sim" %}selected{% endif %}
+                >
+                    Sim
+                </option>
+
+                <option
+                    value="Não"
+                    {% if inspecao.consumo == "Não" %}selected{% endif %}
+                >
+                    Não
+                </option>
+
+            </select>
+
+            <label for="observacao">
+                Observação
+            </label>
+
+            <textarea
+                id="observacao"
+                name="observacao"
+            >{{ inspecao.observacao or "" }}</textarea>
+
+            <div class="botoes">
+
+                <button type="submit">
+                    💾 Salvar Alterações
+                </button>
+
+                <a
+                    class="cancelar"
+                    href="/historico-caixa/{{ inspecao.caixa_id }}"
+                >
+                    Cancelar
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</body>
+
+</html>
+```
+
