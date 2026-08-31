@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -7,318 +8,158 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Histórico da Caixa - Soluinsect</title>
+    <title>Histórico da Caixa</title>
 
     <style>
 
-        * {
-            box-sizing: border-box;
-        }
-
         body {
-            margin: 0;
             font-family: Arial, sans-serif;
             background: #f4f6f8;
-            color: #222;
-        }
-
-        nav {
-            background: #111827;
-            padding: 15px 40px;
-
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-
-            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-        }
-
-        .logo {
-            color: white;
-            font-size: 20px;
-            font-weight: bold;
-            text-decoration: none;
-        }
-
-        .menu {
-            display: flex;
-            gap: 20px;
-        }
-
-        .menu a {
-            color: #d1d5db;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        .menu a:hover {
-            color: white;
+            margin: 0;
+            padding: 30px;
         }
 
         .container {
-            max-width: 1100px;
-            margin: 40px auto;
-            padding: 0 20px;
+            max-width: 1000px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
         }
 
-        .topo {
-            background: white;
-            padding: 25px;
+        h1 {
+            margin-top: 0;
+        }
 
-            border-radius: 12px;
-
-            box-shadow:
-                0 2px 8px rgba(0,0,0,0.08);
-
+        .info {
             margin-bottom: 25px;
         }
 
-        .topo-cabecalho {
-            display: flex;
-
-            justify-content: space-between;
-
-            align-items: center;
-
-            gap: 20px;
+        .info p {
+            margin: 8px 0;
         }
 
-        .topo h1 {
-            margin: 0 0 10px 0;
-        }
-
-        .informacoes {
-            color: #6b7280;
-
-            line-height: 1.7;
-        }
-
-        .botao {
+        .nova-inspecao {
             display: inline-block;
-
-            padding: 12px 18px;
-
-            border-radius: 8px;
-
-            background: #2563eb;
-
+            margin-bottom: 25px;
+            padding: 10px 16px;
+            background: #198754;
             color: white;
-
             text-decoration: none;
-
+            border-radius: 6px;
             font-weight: bold;
-
-            white-space: nowrap;
         }
 
-        .botao:hover {
-            opacity: 0.9;
+        .nova-inspecao:hover {
+            background: #157347;
         }
 
         .tabela-container {
-            background: white;
-
-            border-radius: 12px;
-
-            box-shadow:
-                0 2px 8px rgba(0,0,0,0.08);
-
             overflow-x: auto;
         }
 
         table {
             width: 100%;
-
             border-collapse: collapse;
         }
 
-        th {
-            background: #f9fafb;
-
-            text-align: left;
-
-            padding: 15px;
-
-            border-bottom: 1px solid #e5e7eb;
-        }
-
+        th,
         td {
-            padding: 15px;
-
-            border-bottom: 1px solid #e5e7eb;
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
         }
 
-        tr:last-child td {
-            border-bottom: none;
+        th {
+            background: #f1f3f5;
         }
 
-        .consumo {
-            display: inline-block;
-
-            padding: 6px 12px;
-
-            border-radius: 20px;
-
-            font-size: 13px;
-
+        .consumo.sim {
             font-weight: bold;
         }
 
-        .sim {
-            background: #dcfce7;
-
-            color: #166534;
+        .consumo.nao {
+            font-weight: bold;
         }
 
-        .nao {
-            background: #fee2e2;
+        .editar {
+            display: inline-block;
+            padding: 7px 12px;
+            background: #0d6efd;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 14px;
+        }
 
-            color: #991b1b;
+        .editar:hover {
+            background: #0b5ed7;
         }
 
         .vazio {
             text-align: center;
-
-            padding: 40px;
-
-            color: #6b7280;
+            padding: 30px;
+            color: #666;
         }
 
         .voltar {
             display: inline-block;
-
-            margin-top: 20px;
-
-            color: #2563eb;
-
+            margin-top: 25px;
+            padding: 10px 16px;
+            background: #6c757d;
+            color: white;
             text-decoration: none;
-
-            font-weight: bold;
+            border-radius: 6px;
         }
 
-        @media (max-width: 600px) {
-
-            nav {
-                padding: 15px 20px;
-
-                flex-direction: column;
-
-                gap: 15px;
-            }
-
-            .menu {
-                gap: 12px;
-            }
-
-            .topo-cabecalho {
-                flex-direction: column;
-
-                align-items: flex-start;
-            }
-
-            .botao {
-                width: 100%;
-
-                text-align: center;
-            }
-
-            .container {
-                margin-top: 25px;
-            }
-
+        .voltar:hover {
+            background: #5c636a;
         }
 
     </style>
 
 </head>
 
-
 <body>
 
+    <div class="container">
 
-    <nav>
+        <h1>
+            Histórico da Caixa {{ caixa.id }}
+        </h1>
 
-        <a href="/" class="logo">
-            SOLUINSECT
-        </a>
+        <div class="info">
 
-        <div class="menu">
+            <p>
+                <strong>Cliente:</strong>
+                {{ caixa.cliente }}
+            </p>
 
-            <a href="/">
-                🏠 Início
-            </a>
+            <p>
+                <strong>Local:</strong>
+                {{ caixa.local }}
+            </p>
 
-            <a href="/lista-clientes">
-                👥 Clientes
-            </a>
-
-            <a href="/lista-caixas">
-                📦 Caixas
-            </a>
+            <p>
+                <strong>Status:</strong>
+                {{ caixa.status }}
+            </p>
 
         </div>
 
-    </nav>
-
-
-    <main class="container">
-
-
-        <section class="topo">
-
-
-            <div class="topo-cabecalho">
-
-
-                <div>
-
-                    <h1>
-                        Histórico da Caixa {{ caixa.id }}
-                    </h1>
-
-
-                    <div class="informacoes">
-
-                        <strong>Cliente:</strong>
-                        {{ caixa.cliente_nome }}
-
-                        <br>
-
-                        <strong>Local:</strong>
-                        {{ caixa.local }}
-
-                        <br>
-
-                        <strong>Status:</strong>
-                        {{ caixa.status }}
-
-                    </div>
-
-                </div>
-
-
-                <a
-                    href="/nova-inspecao/{{ caixa.id }}"
-                    class="botao"
-                >
-                    + Nova Inspeção
-                </a>
-
-
-            </div>
-
-
-        </section>
-
+        <a
+            class="nova-inspecao"
+            href="/nova-inspecao/{{ caixa.id }}"
+        >
+            + Nova Inspeção
+        </a>
 
         <section class="tabela-container">
 
-
             {% if inspecoes %}
 
-
             <table>
-
 
                 <thead>
 
@@ -336,27 +177,25 @@
                             Observação
                         </th>
 
+                        <th>
+                            Ações
+                        </th>
+
                     </tr>
 
                 </thead>
 
-
                 <tbody>
-
 
                     {% for inspecao in inspecoes %}
 
-
                     <tr>
-
 
                         <td>
                             {{ inspecao.data }}
                         </td>
 
-
                         <td>
-
 
                             {% if inspecao.consumo == "Sim" %}
 
@@ -372,12 +211,9 @@
 
                             {% endif %}
 
-
                         </td>
 
-
                         <td>
-
 
                             {% if inspecao.observacao %}
 
@@ -389,24 +225,28 @@
 
                             {% endif %}
 
+                        </td>
+
+                        <td>
+
+                            <a
+                                class="editar"
+                                href="/editar-inspecao/{{ inspecao.id }}"
+                            >
+                                ✏️ Editar
+                            </a>
 
                         </td>
 
-
                     </tr>
-
 
                     {% endfor %}
 
-
                 </tbody>
-
 
             </table>
 
-
             {% else %}
-
 
             <div class="vazio">
 
@@ -416,24 +256,21 @@
 
             </div>
 
-
             {% endif %}
-
 
         </section>
 
-
         <a
-            href="/lista-caixas"
             class="voltar"
+            href="/lista-caixas"
         >
-            ← Voltar para Caixas
+            ← Voltar para caixas
         </a>
 
-
-    </main>
-
+    </div>
 
 </body>
 
 </html>
+```
+
