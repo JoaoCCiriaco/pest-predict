@@ -16,101 +16,66 @@
         }
 
         body {
-            margin: 0;
             font-family: Arial, sans-serif;
             background: #f4f6f8;
-            color: #222;
-        }
-
-        nav {
-            background: #111827;
-            padding: 15px 40px;
-
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-
-            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
-        }
-
-        .logo {
-            color: white;
-            font-size: 20px;
-            font-weight: bold;
-            text-decoration: none;
-        }
-
-        .menu {
-            display: flex;
-            gap: 20px;
-        }
-
-        .menu a {
-            color: #d1d5db;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        .menu a:hover {
-            color: white;
+            margin: 0;
+            color: #212529;
         }
 
         .container {
             max-width: 1200px;
-            margin: 40px auto;
-            padding: 0 20px;
+            margin: 30px auto;
+            padding: 20px;
         }
 
         .topo {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 15px;
             margin-bottom: 25px;
         }
 
-        .topo h1 {
+        h1 {
             margin: 0;
         }
 
-        .botao {
-            background: #2563eb;
-            color: white;
-            padding: 12px 18px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: bold;
+        .subtitulo {
+            color: #666;
+            margin-top: 5px;
         }
 
-        .botao:hover {
-            opacity: 0.9;
+        .novo {
+            background: #198754;
+            color: white;
+            padding: 12px 18px;
+            border-radius: 7px;
+            text-decoration: none;
+            font-weight: bold;
         }
 
         .tabela-container {
             background: white;
             border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.07);
             overflow-x: auto;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
+            min-width: 850px;
+        }
+
+        th,
+        td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
         }
 
         th {
-            background: #f9fafb;
-            text-align: left;
-            padding: 15px;
-            border-bottom: 1px solid #e5e7eb;
-        }
-
-        td {
-            padding: 15px;
-            border-bottom: 1px solid #e5e7eb;
-        }
-
-        tr:last-child td {
-            border-bottom: none;
+            background: #f8f9fa;
         }
 
         .status {
@@ -122,71 +87,83 @@
         }
 
         .ativa {
-            background: #dcfce7;
-            color: #166534;
+            background: #d1e7dd;
+            color: #0f5132;
         }
 
         .inativa {
-            background: #fee2e2;
-            color: #991b1b;
+            background: #f8d7da;
+            color: #842029;
         }
 
         .acoes {
             display: flex;
-            gap: 12px;
             flex-wrap: wrap;
+            gap: 7px;
+        }
+
+        .acao {
+            padding: 8px 10px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: bold;
         }
 
         .historico {
-            color: #059669;
-            text-decoration: none;
-            font-weight: bold;
+            background: #0d6efd;
+            color: white;
+        }
+
+        .inspecao {
+            background: #198754;
+            color: white;
+        }
+
+        .qr {
+            background: #6f42c1;
+            color: white;
         }
 
         .editar {
-            color: #2563eb;
-            text-decoration: none;
-            font-weight: bold;
+            background: #ffc107;
+            color: #212529;
         }
 
         .excluir {
-            color: #dc2626;
+            background: #dc3545;
+            color: white;
+        }
+
+        .voltar {
+            display: inline-block;
+            margin-top: 20px;
+            color: #0d6efd;
             text-decoration: none;
             font-weight: bold;
         }
 
         .vazio {
-            text-align: center;
             padding: 40px;
-            color: #6b7280;
+            text-align: center;
+            color: #666;
         }
 
-        @media (max-width: 600px) {
+        @media (max-width: 700px) {
 
-            nav {
-                padding: 15px 20px;
-                flex-direction: column;
-                gap: 15px;
-            }
-
-            .menu {
-                gap: 12px;
+            .container {
+                margin: 15px auto;
+                padding: 10px;
             }
 
             .topo {
                 flex-direction: column;
                 align-items: flex-start;
-                gap: 15px;
             }
 
-            .botao {
+            .novo {
                 width: 100%;
                 text-align: center;
-            }
-
-            .acoes {
-                flex-direction: column;
-                gap: 8px;
             }
 
         }
@@ -195,54 +172,43 @@
 
 </head>
 
-
 <body>
 
-
-    <nav>
-
-        <a href="/" class="logo">
-            SOLUINSECT
-        </a>
-
-        <div class="menu">
-
-            <a href="/">
-                🏠 Início
-            </a>
-
-            <a href="/lista-clientes">
-                👥 Clientes
-            </a>
-
-            <a href="/lista-caixas">
-                📦 Caixas
-            </a>
-
-        </div>
-
-    </nav>
+<div class="container">
 
 
-    <main class="container">
+    <!-- CABEÇALHO -->
 
+    <div class="topo">
 
-        <div class="topo">
+        <div>
 
             <h1>
-                Caixas
+                📦 Caixas
             </h1>
 
-            <a href="/caixas" class="botao">
-                + Nova Caixa
-            </a>
+            <div class="subtitulo">
+                Gerenciamento das caixas de monitoramento
+            </div>
 
         </div>
 
 
-        <div class="tabela-container">
+        <a
+            class="novo"
+            href="/caixas"
+        >
+            ➕ Nova Caixa
+        </a>
 
-            {% if caixas %}
+    </div>
+
+
+    <!-- LISTA -->
+
+    <div class="tabela-container">
+
+        {% if caixas %}
 
             <table>
 
@@ -250,15 +216,25 @@
 
                     <tr>
 
-                        <th>ID</th>
+                        <th>
+                            ID
+                        </th>
 
-                        <th>Cliente</th>
+                        <th>
+                            Cliente
+                        </th>
 
-                        <th>Local</th>
+                        <th>
+                            Local
+                        </th>
 
-                        <th>Status</th>
+                        <th>
+                            Status
+                        </th>
 
-                        <th>Ações</th>
+                        <th>
+                            Ações
+                        </th>
 
                     </tr>
 
@@ -269,69 +245,95 @@
 
                     {% for caixa in caixas %}
 
-                    <tr>
+                        <tr>
 
-                        <td>
-                            {{ caixa.id }}
-                        </td>
+                            <td>
+                                <strong>
+                                    #{{ caixa.id }}
+                                </strong>
+                            </td>
 
-                        <td>
-                            {{ caixa.cliente_nome }}
-                        </td>
 
-                        <td>
-                            {{ caixa.local }}
-                        </td>
+                            <td>
+                                {{ caixa.cliente_nome }}
+                            </td>
 
-                        <td>
 
-                            {% if caixa.status == "Ativa" %}
+                            <td>
+                                {{ caixa.local }}
+                            </td>
 
-                                <span class="status ativa">
-                                    Ativa
-                                </span>
 
-                            {% else %}
+                            <td>
 
-                                <span class="status inativa">
-                                    Inativa
-                                </span>
+                                {% if caixa.status == "Ativa" %}
 
-                            {% endif %}
+                                    <span class="status ativa">
+                                        🟢 Ativa
+                                    </span>
 
-                        </td>
+                                {% else %}
 
-                        <td>
+                                    <span class="status inativa">
+                                        🔴 Inativa
+                                    </span>
 
-                            <div class="acoes">
+                                {% endif %}
 
-                                <a
-                                    href="/historico-caixa/{{ caixa.id }}"
-                                    class="historico"
-                                >
-                                    📋 Histórico
-                                </a>
+                            </td>
 
-                                <a
-                                    href="/editar-caixa/{{ caixa.id }}"
-                                    class="editar"
-                                >
-                                    ✏️ Editar
-                                </a>
 
-                                <a
-                                    href="/excluir-caixa/{{ caixa.id }}"
-                                    class="excluir"
-                                    onclick="return confirm('Tem certeza que deseja excluir esta caixa?');"
-                                >
-                                    🗑️ Excluir
-                                </a>
+                            <td>
 
-                            </div>
+                                <div class="acoes">
 
-                        </td>
 
-                    </tr>
+                                    <a
+                                        class="acao inspecao"
+                                        href="/nova-inspecao/{{ caixa.id }}"
+                                    >
+                                        📋 Nova inspeção
+                                    </a>
+
+
+                                    <a
+                                        class="acao historico"
+                                        href="/historico-caixa/{{ caixa.id }}"
+                                    >
+                                        📜 Histórico
+                                    </a>
+
+
+                                    <a
+                                        class="acao qr"
+                                        href="/qr-code-caixa/{{ caixa.id }}"
+                                    >
+                                        📱 QR Code
+                                    </a>
+
+
+                                    <a
+                                        class="acao editar"
+                                        href="/editar-caixa/{{ caixa.id }}"
+                                    >
+                                        ✏️ Editar
+                                    </a>
+
+
+                                    <a
+                                        class="acao excluir"
+                                        href="/excluir-caixa/{{ caixa.id }}"
+                                        onclick="return confirm('Tem certeza que deseja excluir esta caixa? Todas as inspeções desta caixa também serão excluídas.');"
+                                    >
+                                        🗑️ Excluir
+                                    </a>
+
+
+                                </div>
+
+                            </td>
+
+                        </tr>
 
                     {% endfor %}
 
@@ -339,30 +341,42 @@
 
             </table>
 
-
-            {% else %}
+        {% else %}
 
             <div class="vazio">
 
+                <h2>
+                    📦 Nenhuma caixa cadastrada
+                </h2>
+
                 <p>
-                    Nenhuma caixa cadastrada.
+                    Cadastre a primeira caixa para começar o monitoramento.
                 </p>
 
-                <a href="/caixas" class="botao">
-                    Cadastrar primeira caixa
+                <a
+                    class="novo"
+                    href="/caixas"
+                >
+                    ➕ Cadastrar primeira caixa
                 </a>
 
             </div>
 
-            {% endif %}
+        {% endif %}
 
-        </div>
+    </div>
 
 
-    </main>
+    <a
+        class="voltar"
+        href="/"
+    >
+        ← Voltar para o Dashboard
+    </a>
 
+
+</div>
 
 </body>
 
 </html>
-

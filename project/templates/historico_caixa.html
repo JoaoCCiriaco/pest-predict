@@ -5,10 +5,9 @@
 <head>
 
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Histórico da Caixa</title>
+    <title>Histórico da Caixa {{ caixa.id }}</title>
 
     <style>
 
@@ -20,30 +19,31 @@
         }
 
         .container {
-            max-width: 1000px;
+            max-width: 1200px;
             margin: auto;
+        }
+
+        .cabecalho {
             background: white;
-            padding: 30px;
+            padding: 25px;
             border-radius: 12px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
         }
 
         h1 {
             margin-top: 0;
         }
 
-        .info {
-            margin-bottom: 25px;
-        }
-
-        .info p {
-            margin: 8px 0;
+        .informacoes {
+            display: grid;
+            gap: 8px;
         }
 
         .nova-inspecao {
             display: inline-block;
-            margin-bottom: 25px;
-            padding: 10px 16px;
+            margin-top: 20px;
+            padding: 11px 18px;
             background: #198754;
             color: white;
             text-decoration: none;
@@ -51,11 +51,11 @@
             font-weight: bold;
         }
 
-        .nova-inspecao:hover {
-            background: #157347;
-        }
-
         .tabela-container {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
             overflow-x: auto;
         }
 
@@ -75,46 +75,43 @@
             background: #f1f3f5;
         }
 
-        .consumo.sim {
+        .sim {
+            color: #198754;
             font-weight: bold;
         }
 
-        .consumo.nao {
+        .nao {
+            color: #dc3545;
             font-weight: bold;
+        }
+
+        .acoes {
+            white-space: nowrap;
+        }
+
+        .editar,
+        .excluir {
+            display: inline-block;
+            padding: 7px 10px;
+            border-radius: 5px;
+            text-decoration: none;
+            color: white;
+            font-size: 13px;
         }
 
         .editar {
-            display: inline-block;
-            padding: 7px 12px;
             background: #0d6efd;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            font-size: 14px;
         }
 
-        .editar:hover {
-            background: #0b5ed7;
-        }
-
-        .vazio {
-            text-align: center;
-            padding: 30px;
-            color: #666;
+        .excluir {
+            background: #dc3545;
         }
 
         .voltar {
             display: inline-block;
-            margin-top: 25px;
-            padding: 10px 16px;
-            background: #6c757d;
-            color: white;
+            margin-top: 20px;
+            color: #333;
             text-decoration: none;
-            border-radius: 6px;
-        }
-
-        .voltar:hover {
-            background: #5c636a;
         }
 
     </style>
@@ -123,28 +120,30 @@
 
 <body>
 
-    <div class="container">
+<div class="container">
+
+    <section class="cabecalho">
 
         <h1>
             Histórico da Caixa {{ caixa.id }}
         </h1>
 
-        <div class="info">
+        <div class="informacoes">
 
-            <p>
+            <div>
                 <strong>Cliente:</strong>
-                {{ caixa.cliente }}
-            </p>
+                {{ caixa.cliente_nome }}
+            </div>
 
-            <p>
+            <div>
                 <strong>Local:</strong>
                 {{ caixa.local }}
-            </p>
+            </div>
 
-            <p>
+            <div>
                 <strong>Status:</strong>
                 {{ caixa.status }}
-            </p>
+            </div>
 
         </div>
 
@@ -155,119 +154,113 @@
             + Nova Inspeção
         </a>
 
-        <section class="tabela-container">
+    </section>
 
-            {% if inspecoes %}
 
-            <table>
+    <section class="tabela-container">
 
-                <thead>
+        {% if inspecoes %}
 
-                    <tr>
+        <table>
 
-                        <th>
-                            Data
-                        </th>
+            <thead>
 
-                        <th>
-                            Consumo
-                        </th>
+                <tr>
+                    <th>Data</th>
+                    <th>Horário</th>
+                    <th>Técnico</th>
+                    <th>Consumo</th>
+                    <th>Observação</th>
+                    <th>Ações</th>
+                </tr>
 
-                        <th>
-                            Observação
-                        </th>
+            </thead>
 
-                        <th>
-                            Ações
-                        </th>
+            <tbody>
 
-                    </tr>
+                {% for inspecao in inspecoes %}
 
-                </thead>
+                <tr>
 
-                <tbody>
+                    <td>
+                        {{ inspecao.data[8:10] }}/{{ inspecao.data[5:7] }}/{{ inspecao.data[0:4] }}
+                    </td>
 
-                    {% for inspecao in inspecoes %}
+                    <td>
+                        {{ inspecao.horario or "-" }}
+                    </td>
 
-                    <tr>
+                    <td>
+                        {{ inspecao.tecnico or "-" }}
+                    </td>
 
-                        <td>
-                            {{ inspecao.data }}
-                        </td>
+                    <td>
 
-                        <td>
+                        {% if inspecao.consumo == "Sim" %}
 
-                            {% if inspecao.consumo == "Sim" %}
+                            <span class="sim">
+                                🟢 Sim
+                            </span>
 
-                                <span class="consumo sim">
-                                    🟢 Sim
-                                </span>
+                        {% else %}
 
-                            {% else %}
+                            <span class="nao">
+                                🔴 Não
+                            </span>
 
-                                <span class="consumo nao">
-                                    🔴 Não
-                                </span>
+                        {% endif %}
 
-                            {% endif %}
+                    </td>
 
-                        </td>
+                    <td>
+                        {{ inspecao.observacao or "-" }}
+                    </td>
 
-                        <td>
+                    <td class="acoes">
 
-                            {% if inspecao.observacao %}
+                        <a
+                            class="editar"
+                            href="/editar-inspecao/{{ inspecao.id }}"
+                        >
+                            ✏️ Editar
+                        </a>
 
-                                {{ inspecao.observacao }}
+                        <a
+                            class="excluir"
+                            href="/excluir-inspecao/{{ inspecao.id }}"
+                            onclick="return confirm('Tem certeza que deseja excluir esta inspeção?');"
+                        >
+                            🗑️ Excluir
+                        </a>
 
-                            {% else %}
+                    </td>
 
-                                -
+                </tr>
 
-                            {% endif %}
+                {% endfor %}
 
-                        </td>
+            </tbody>
 
-                        <td>
+        </table>
 
-                            <a
-                                class="editar"
-                                href="/editar-inspecao/{{ inspecao.id }}"
-                            >
-                                ✏️ Editar
-                            </a>
+        {% else %}
 
-                        </td>
+            <p>
+                Nenhuma inspeção registrada para esta caixa.
+            </p>
 
-                    </tr>
+        {% endif %}
 
-                    {% endfor %}
+    </section>
 
-                </tbody>
+    <a
+        class="voltar"
+        href="/lista-caixas"
+    >
+        ← Voltar para Lista de Caixas
+    </a>
 
-            </table>
-
-            {% else %}
-
-            <div class="vazio">
-
-                <p>
-                    Nenhuma inspeção registrada para esta caixa.
-                </p>
-
-            </div>
-
-            {% endif %}
-
-        </section>
-
-        <a
-            class="voltar"
-            href="/lista-caixas"
-        >
-            ← Voltar para caixas
-        </a>
-
-    </div>
+</div>
 
 </body>
 

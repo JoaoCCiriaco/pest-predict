@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>QR Code - Caixa {{ caixa.id }}</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            margin: 0;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+        }
+
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        h1 {
+            margin-top: 0;
+        }
+
+        .informacoes {
+            margin: 20px 0;
+            text-align: left;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .informacoes p {
+            margin: 8px 0;
+        }
+
+        #qrcode {
+            margin: 25px auto;
+            width: 250px;
+            height: 250px;
+        }
+
+        .link {
+            word-break: break-all;
+            font-size: 13px;
+            color: #666;
+            margin: 20px 0;
+        }
+
+        .voltar,
+        .imprimir {
+            display: inline-block;
+            padding: 10px 18px;
+            border-radius: 6px;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            font-size: 15px;
+            color: white;
+            margin: 5px;
+        }
+
+        .voltar {
+            background: #6c757d;
+        }
+
+        .imprimir {
+            background: #198754;
+        }
+
+        @media print {
+
+            .nao-imprimir {
+                display: none;
+            }
+
+            body {
+                background: white;
+            }
+
+            .card {
+                box-shadow: none;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <div class="card">
+
+            <h1>
+                QR Code da Caixa {{ caixa.id }}
+            </h1>
+
+            <div class="informacoes">
+
+                <p>
+                    <strong>Cliente:</strong>
+                    {{ caixa.cliente_nome }}
+                </p>
+
+                <p>
+                    <strong>Local:</strong>
+                    {{ caixa.local }}
+                </p>
+
+                <p>
+                    <strong>Status:</strong>
+                    {{ caixa.status }}
+                </p>
+
+            </div>
+
+            <div id="qrcode"></div>
+
+            <p>
+                <strong>
+                    Escaneie para registrar uma nova inspeção.
+                </strong>
+            </p>
+
+            <p class="link" id="endereco"></p>
+
+            <div class="nao-imprimir">
+
+                <button
+                    class="imprimir"
+                    onclick="window.print()"
+                >
+                    🖨️ Imprimir QR Code
+                </button>
+
+                <a
+                    class="voltar"
+                    href="/historico-caixa/{{ caixa.id }}"
+                >
+                    ← Voltar para Histórico
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function() {
+
+            const enderecoCompleto =
+                window.location.origin +
+                "/nova-inspecao/{{ caixa.id }}";
+
+            document.getElementById("endereco").textContent =
+                enderecoCompleto;
+
+            new QRCode(
+                document.getElementById("qrcode"),
+                {
+                    text: enderecoCompleto,
+                    width: 250,
+                    height: 250
+                }
+            );
+
+        });
+
+    </script>
+
+</body>
+
+</html>
