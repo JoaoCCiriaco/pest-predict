@@ -69,3 +69,4 @@ project/
     ├── editar_inspecao.html
     ├── historico_caixa.html
     └── qr_code_caixa.html
+
