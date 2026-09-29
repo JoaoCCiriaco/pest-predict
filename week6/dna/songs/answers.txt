@@ -1,0 +1,3 @@
+In this problem set, we explored the Spotify database to analyze various characteristics of songs, such as danceability, energy, duration, and tempo. 
+
+By querying the database, we can see how audio features correlate with listener preferences and audio composition. Higher tempo and higher energy tracks often correspond to higher danceability, creating an uplifting mood for listeners. Understanding these attributes helps algorithms recommend better music tailored to specific moods or activities.
