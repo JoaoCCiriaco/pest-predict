@@ -1,38 +1,67 @@
-import os
+<!DOCTYPE html>
 
-from cs50 import SQL
-from flask import Flask, redirect, render_template, request
+<html lang="en">
+    <head>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+        <link href="/static/styles.css" rel="stylesheet">
+        <title>Birthdays</title>
+    </head>
 
-app = Flask(__name__)
+    <body>
 
-app.config["TEMPLATES_AUTO_RELOAD"] = True
+        <div class="header">
+            <h1>Birthdays</h1>
+        </div>
 
-db = SQL("sqlite:///birthdays.db")
+        <div class="container">
 
+            <div class="section">
 
-@app.after_request
-def after_request(response):
-    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
-    response.headers["Expires"] = 0
-    response.headers["Pragma"] = "no-cache"
-    return response
+                <h2>Add a Birthday</h2>
 
+                <form action="/" method="post">
+                    <input name="name" placeholder="Name" type="text">
 
-@app.route("/", methods=["GET", "POST"])
-def index():
-    if request.method == "POST":
+                    <input name="month" placeholder="Month" type="number">
 
-        name = request.form.get("name")
-        month = request.form.get("month")
-        day = request.form.get("day")
+                    <input name="day" placeholder="Day" type="number">
 
-        db.execute(
-            "INSERT INTO birthdays (name, month, day) VALUES (?, ?, ?)",
-            name, month, day
-        )
+                    <button type="submit">Add Birthday</button>
+                </form>
 
-        return redirect("/")
+            </div>
 
-    birthdays = db.execute("SELECT * FROM birthdays")
+            <div class="section">
 
-    return render_template("index.html", birthdays=birthdays)
+                <h2>All Birthdays</h2>
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Birthday</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for birthday in birthdays %}
+
+                            <tr>
+                                <td>{{ birthday.name }}</td>
+                                <td>{{ birthday.month }}/{{ birthday.day }}</td>
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </body>
+</html>
