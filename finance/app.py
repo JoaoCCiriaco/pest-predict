@@ -80,7 +80,7 @@ def buy():
             shares = int(shares)
             if shares <= 0:
                 return apology("a quantidade deve ser positiva", 400)
-        except ValueError:
+        except (ValueError, TypeError):
             return apology("a quantidade deve ser um número", 400)
 
         user_id = session["user_id"]
@@ -218,18 +218,21 @@ def sell():
             shares = int(shares)
             if shares <= 0:
                 return apology("a quantidade deve ser positiva", 400)
-        except ValueError:
+        except (ValueError, TypeError):
             return apology("a quantidade deve ser um número", 400)
 
         user_shares = db.execute(
             "SELECT SUM(shares) as total FROM transactions WHERE user_id = ? AND symbol = ?",
             user_id, symbol
-        )[0]["total"]
+        )
 
-        if user_shares is None or user_shares < shares:
+        if not user_shares or user_shares[0]["total"] is None or user_shares[0]["total"] < shares:
             return apology("não tem ações suficientes", 400)
 
         stock = lookup(symbol)
+        if stock is None:
+            return apology("símbolo inválido", 400)
+
         total_income = shares * stock["price"]
 
         db.execute("UPDATE users SET cash = cash + ? WHERE id = ?", total_income, user_id)
