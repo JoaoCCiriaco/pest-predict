@@ -1,3 +1,11 @@
-sort1: Bubble Sort
-sort2: Selection Sort
-sort3: Merge Sort
+sort1 uses: Bubble Sort
+
+How do you know?: It is faster on already sorted data but slower on random and reversed data.
+
+sort2 uses: Merge Sort
+
+How do you know?: It has consistently fast runtimes across sorted, random, and reversed data.
+
+sort3 uses: Selection Sort
+
+How do you know?: Its runtime is consistently slower and is largely unaffected by the initial order of the data.
