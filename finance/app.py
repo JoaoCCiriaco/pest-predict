@@ -72,8 +72,7 @@ def login():
 
         return redirect("/")
 
-    else:
-        return render_template("login.html")
+    return render_template("login.html")
 
 
 @app.route("/logout")
@@ -87,7 +86,22 @@ def logout():
 @app.route("/quote", methods=["GET", "POST"])
 @login_required
 def quote():
-    return apology("TODO")
+
+    if request.method == "POST":
+
+        symbol = request.form.get("symbol")
+
+        if not symbol:
+            return apology("must provide symbol")
+
+        stock = lookup(symbol)
+
+        if stock is None:
+            return apology("invalid symbol")
+
+        return render_template("quote.html", quote=stock)
+
+    return render_template("quote.html")
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -126,8 +140,7 @@ def register():
 
         return redirect("/login")
 
-    else:
-        return render_template("register.html")
+    return render_template("register.html")
 
 
 @app.route("/sell", methods=["GET", "POST"])

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, width=device-width">
+
+        <title>Quote</title>
+
+        <link href="/static/styles.css" rel="stylesheet">
+    </head>
+
+    <body>
+
+        <nav class="navbar">
+            <a href="/">Finance</a>
+            <a href="/quote">Quote</a>
+            <a href="/buy">Buy</a>
+            <a href="/sell">Sell</a>
+            <a href="/history">History</a>
+            <a href="/logout">Log Out</a>
+        </nav>
+
+        <main>
+
+            <form action="/quote" method="post">
+
+                <input autocomplete="off"
+                       autofocus
+                       name="symbol"
+                       placeholder="Symbol"
+                       type="text">
+
+                <button type="submit">Get Quote</button>
+
+            </form>
+
+            {% if quote %}
+                <h2>{{ quote.name }} ({{ quote.symbol }})</h2>
+                <p>Price: {{ quote.price | usd }}</p>
+            {% endif %}
+
+        </main>
+
+    </body>
+</html>
