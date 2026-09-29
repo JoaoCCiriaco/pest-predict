@@ -9,23 +9,43 @@
         <script>
             document.addEventListener("DOMContentLoaded", function() {
 
-                let buttons = document.querySelectorAll("button");
+                // Multiple choice
+                let buttons = document.querySelectorAll(".multiple-choice button");
 
                 for (let button of buttons)
                 {
                     button.addEventListener("click", function() {
-
                         if (button.innerHTML == "Brasília")
                         {
                             button.style.backgroundColor = "green";
+                            document.querySelector("#mc-feedback").innerHTML = "Correct!";
                         }
                         else
                         {
                             button.style.backgroundColor = "red";
+                            document.querySelector("#mc-feedback").innerHTML = "Incorrect!";
                         }
-
                     });
                 }
+
+                // Free response
+                let check = document.querySelector("#check");
+
+                check.addEventListener("click", function() {
+                    let answer = document.querySelector("#answer");
+
+                    if (answer.value.trim().toLowerCase() == "júpiter" ||
+                        answer.value.trim().toLowerCase() == "jupiter")
+                    {
+                        answer.style.backgroundColor = "green";
+                        document.querySelector("#fr-feedback").innerHTML = "Correct!";
+                    }
+                    else
+                    {
+                        answer.style.backgroundColor = "red";
+                        document.querySelector("#fr-feedback").innerHTML = "Incorrect!";
+                    }
+                });
 
             });
         </script>
@@ -38,7 +58,7 @@
 
         <div class="container">
 
-            <div class="section">
+            <div class="section multiple-choice">
                 <h2>Part 1: Multiple Choice</h2>
                 <hr>
 
@@ -47,14 +67,20 @@
                 <button>São Paulo</button>
                 <button>Brasília</button>
                 <button>Rio de Janeiro</button>
+
+                <p id="mc-feedback"></p>
             </div>
 
             <div class="section">
                 <h2>Part 2: Free Response</h2>
                 <hr>
 
-                <!-- TODO: Add free response question here -->
+                <h3>Qual é o maior planeta do Sistema Solar?</h3>
 
+                <input id="answer" type="text">
+                <button id="check">Check Answer</button>
+
+                <p id="fr-feedback"></p>
             </div>
 
         </div>
