@@ -1,3 +1,3 @@
-sort1: Selection Sort
-sort2: Merge Sort
-sort3: Bubble Sort
+sort1: selection
+sort2: bubble
+sort3: merge
