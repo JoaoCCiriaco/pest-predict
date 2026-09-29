@@ -1,37 +1,38 @@
-<!DOCTYPE html>
+import os
 
-<html lang="en">
-    <head>
-        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
-        <link href="/static/styles.css" rel="stylesheet">
-        <title>Birthdays</title>
-    </head>
-    <body>
-        <div class="header">
-            <h1>Birthdays</h1>
-        </div>
-        <div class="container">
-            <div class="section">
+from cs50 import SQL
+from flask import Flask, redirect, render_template, request
 
-                <h2>Add a Birthday</h2>
-                <!-- TODO: Create a form for users to submit a name, a month, and a day -->
-            </div>
+app = Flask(__name__)
 
-            <div class="section">
+app.config["TEMPLATES_AUTO_RELOAD"] = True
 
-                <h2>All Birthdays</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Birthday</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- TODO: Loop through the database entries to display them in this table -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </body>
-</html>
+db = SQL("sqlite:///birthdays.db")
+
+
+@app.after_request
+def after_request(response):
+    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    response.headers["Expires"] = 0
+    response.headers["Pragma"] = "no-cache"
+    return response
+
+
+@app.route("/", methods=["GET", "POST"])
+def index():
+    if request.method == "POST":
+
+        name = request.form.get("name")
+        month = request.form.get("month")
+        day = request.form.get("day")
+
+        db.execute(
+            "INSERT INTO birthdays (name, month, day) VALUES (?, ?, ?)",
+            name, month, day
+        )
+
+        return redirect("/")
+
+    birthdays = db.execute("SELECT * FROM birthdays")
+
+    return render_template("index.html", birthdays=birthdays)
