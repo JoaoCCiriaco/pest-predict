@@ -1,0 +1,30 @@
+HTML tags used:
+1. nav
+2. a
+3. header
+4. main
+5. section
+6. h1
+7. h2
+8. p
+9. ul
+10. li
+11. form
+12. input
+13. button
+14. footer
+
+CSS properties used:
+1. font-family
+2. background-color
+3. color
+4. padding
+5. margin
+6. font-size
+7. min-height
+
+JavaScript:
+JavaScript is used to make buttons interactive by displaying messages when the user clicks them.
+
+Bootstrap:
+Bootstrap is used for the navigation bar, buttons, cards, grid layout, and responsive design.
