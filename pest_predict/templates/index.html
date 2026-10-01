@@ -3,23 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PestPredict SP - Previsão Preditiva de Pragas</title>
+    <title>PestPredict SP - Inteligência Preditiva de Pragas</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body class="bg-light">
 
-    <nav class="navbar navbar-dark bg-dark mb-4 shadow">
-        <div class="container">
-            <span class="navbar-brand mb-0 h1">🦟 PestPredict SP - Inteligência Preditiva de Pragas</span>
+    <!-- Barra Superior com Logótipo e Título Limpo -->
+    <nav class="navbar navbar-dark bg-dark shadow py-2">
+        <div class="container d-flex align-items-center">
+            <a class="navbar-brand d-flex align-items-center fw-bold fs-4" href="#">
+                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo PestPredict SP" height="45" class="d-inline-block align-text-top me-3 bg-white p-1 rounded">
+                PestPredict SP - Inteligência Preditiva de Pragas
+            </a>
         </div>
     </nav>
+
+    <!-- Banner Principal de Topo -->
+    <div class="container my-4">
+        <div class="card shadow-sm border-0 overflow-hidden">
+            <img src="{{ url_for('static', filename='img/banner.jpg') }}" class="img-fluid w-100" alt="Banner PestPredict SP" style="max-height: 280px; object-fit: cover;">
+        </div>
+    </div>
 
     <div class="container mb-5">
 
         <!-- Formulário de Filtro -->
-        <div class="card shadow-sm mb-4">
+        <div class="card shadow-sm mb-4 border-0">
             <div class="card-body">
                 <form method="POST" class="row g-3 align-items-end">
                     <div class="col-md-5">
@@ -51,7 +62,7 @@
                     </div>
 
                     <div class="col-md-2">
-                        <button type="submit" class="btn btn-primary w-100">Analisar Risco</button>
+                        <button type="submit" class="btn btn-success w-100 fw-bold">Analisar Risco</button>
                     </div>
                 </form>
             </div>
@@ -59,7 +70,7 @@
 
         {% if weather %}
         <!-- Painel Meteorológico Atual -->
-        <div class="alert alert-info shadow-sm d-flex justify-content-around text-center mb-4">
+        <div class="alert alert-success shadow-sm d-flex justify-content-around text-center mb-4 border-0">
             <div>
                 <small class="text-muted d-block">Localização</small>
                 <strong>{{ selected_city }} / SP</strong>
@@ -124,7 +135,7 @@
                                     {% else %}text-success{% endif %}">
                                     {{ item.level }}
                                 </p>
-                                <small class="text-primary d-block text-center mt-2">👇 Clique para ver manchas de incidência no mapa</small>
+                                <small class="text-success d-block text-center mt-2">👇 Clique para ver manchas de incidência no mapa</small>
                             </div>
                         </div>
                     </div>
@@ -132,7 +143,7 @@
                 </div>
 
                 <!-- MAPA DA ABA URBANA -->
-                <div class="card shadow-sm mb-4">
+                <div class="card shadow-sm mb-4 border-0">
                     <div class="card-header bg-dark text-white fw-bold d-flex justify-content-between align-items-center">
                         <span>🗺️ Manchas de Incidência em Áreas Urbanas (SP)</span>
                         <span id="urbanPestTitle" class="badge bg-warning text-dark">Clique em uma praga urbana</span>
@@ -171,7 +182,7 @@
                                     {% else %}text-success{% endif %}">
                                     {{ item.level }}
                                 </p>
-                                <small class="text-primary d-block text-center mt-2">👇 Clique para ver manchas de incidência no mapa</small>
+                                <small class="text-success d-block text-center mt-2">👇 Clique para ver manchas de incidência no mapa</small>
                             </div>
                         </div>
                     </div>
@@ -179,7 +190,7 @@
                 </div>
 
                 <!-- MAPA DA ABA AGRÍCOLA -->
-                <div class="card shadow-sm mb-4">
+                <div class="card shadow-sm mb-4 border-0">
                     <div class="card-header bg-dark text-white fw-bold d-flex justify-content-between align-items-center">
                         <span>🌾 Mosaico de Culturas & Manchas de Suscetibilidade Agrícola (SP)</span>
                         <span id="agriPestTitle" class="badge bg-warning text-dark">Clique em uma praga agrícola</span>
@@ -187,7 +198,7 @@
                     <div class="card-body p-0">
                         <div id="mapAgri" class="map-container"></div>
                     </div>
-                    <div class="card-footer bg-white d-flex justify-content-around flex-wrap">
+                    <div class="card-footer bg-white d-flex justify-content-around flex-wrap border-0">
                         <div><span class="legend-dot" style="background: #1b4332;"></span><strong>Eucalipto</strong></div>
                         <div><span class="legend-dot" style="background: #2ec4b6;"></span><strong>Cana-de-Açúcar</strong></div>
                         <div><span class="legend-dot" style="background: #7209b7;"></span><strong>Soja</strong></div>
@@ -209,9 +220,7 @@
         var esriTileUrl = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}';
         var esriAttrib = 'Tiles &copy; Esri &mdash; OpenStreetMap contributors';
 
-        // -------------------------------------------------------------
-        // 1. MAPA URBANO (Desenha as manchas urbanas em cinza e calor de pragas)
-        // -------------------------------------------------------------
+        // 1. MAPA URBANO
         var mapUrban = L.map('mapUrban').setView([-22.3, -48.5], 7);
         L.tileLayer(esriTileUrl, { attribution: esriAttrib, maxZoom: 18 }).addTo(mapUrban);
 
@@ -224,7 +233,6 @@
                 .then(data => {
                     urbanBaseGroup.clearLayers();
                     data.forEach(item => {
-                        // Mancha Urbana em Cinza (Raio de 25km em metros)
                         L.circle([item.lat, item.lon], {
                             color: '#6c757d',
                             fillColor: '#6c757d',
@@ -247,7 +255,6 @@
                     data.forEach(item => {
                         var alertColor = item.score >= 75 ? '#dc3545' : (item.score >= 50 ? '#fd7e14' : '#ffc107');
 
-                        // Mancha Vermelha/Laranja de Alerta
                         L.circle([item.lat, item.lon], {
                             color: alertColor,
                             fillColor: alertColor,
@@ -260,9 +267,7 @@
                 });
         }
 
-        // -------------------------------------------------------------
-        // 2. MAPA AGRÍCOLA (Desenha as manchas de culturas e sobrepõe a praga)
-        // -------------------------------------------------------------
+        // 2. MAPA AGRÍCOLA
         var mapAgri = L.map('mapAgri').setView([-22.3, -48.5], 7);
         L.tileLayer(esriTileUrl, { attribution: esriAttrib, maxZoom: 18 }).addTo(mapAgri);
 
@@ -275,7 +280,6 @@
                 .then(data => {
                     agriCropGroup.clearLayers();
                     data.forEach(item => {
-                        // Mancha de Cobertura da Cultura Agrícola (Raio de 30km)
                         L.circle([item.lat, item.lon], {
                             color: item.crop_color,
                             fillColor: item.crop_color,
@@ -298,7 +302,6 @@
                     data.forEach(item => {
                         var alertColor = item.score >= 75 ? '#dc3545' : (item.score >= 50 ? '#fd7e14' : '#ffc107');
 
-                        // Mancha de Calor/Incidência Vermelha em sobreposição
                         L.circle([item.lat, item.lon], {
                             color: alertColor,
                             fillColor: alertColor,
@@ -311,7 +314,6 @@
                 });
         }
 
-        // Redimensionamento de abas
         document.getElementById('agri-tab').addEventListener('shown.bs.tab', function () {
             mapAgri.invalidateSize();
         });
