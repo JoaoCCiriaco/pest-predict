@@ -5,17 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PestPredict SP - Previsão Preditiva de Pragas</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+    <!-- Leaflet CSS para o Mapa -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body class="bg-light">
 
-    <nav class="navbar navbar-dark bg-dark mb-4">
+    <nav class="navbar navbar-dark bg-dark mb-4 shadow">
         <div class="container">
-            <span class="navbar-brand mb-0 h1">🦟 PestPredict SP - Sistema Preditivo de Pragas</span>
+            <span class="navbar-brand mb-0 h1">🦟 PestPredict SP - Inteligência Preditiva de Pragas</span>
         </div>
     </nav>
 
-    <div class="container">
+    <div class="container mb-5">
 
         <!-- Formulário de Filtro -->
         <div class="card shadow-sm mb-4">
@@ -31,12 +34,21 @@
                     </div>
 
                     <div class="col-md-5">
-                        <label class="form-label fw-bold">Tipo de Ambiente / Cliente:</label>
+                        <label class="form-label fw-bold">Ambiente / Cultura Agrícola:</label>
                         <select name="env_type" class="form-select">
-                            <option value="Residência" {% if env_type == 'Residência' %}selected{% endif %}>Residência / Condomínio</option>
-                            <option value="Comércio" {% if env_type == 'Comércio' %}selected{% endif %}>Comércio / Indústria</option>
-                            <option value="Próximo a APP/Córrego" {% if env_type == 'Próximo a APP/Córrego' %}selected{% endif %}>Área Próxima a APP / Córrego</option>
-                            <option value="Eucalipto" {% if env_type == 'Eucalipto' %}selected{% endif %}>Cultura de Eucalipto / Agrícola</option>
+                            <optgroup label="Ambientes Urbanos">
+                                <option value="Residência" {% if env_type == 'Residência' %}selected{% endif %}>Residência / Condomínio</option>
+                                <option value="Comércio" {% if env_type == 'Comércio' %}selected{% endif %}>Comércio / Indústria</option>
+                                <option value="Próximo a APP/Córrego" {% if env_type == 'Próximo a APP/Córrego' %}selected{% endif %}>Área Próxima a APP / Córrego</option>
+                            </optgroup>
+                            <optgroup label="Setor Florestal & Agrícola">
+                                <option value="Eucalyptus grandis" {% if env_type == 'Eucalyptus grandis' %}selected{% endif %}>Eucalyptus grandis</option>
+                                <option value="Eucalyptus urograndis" {% if env_type == 'Eucalyptus urograndis' %}selected{% endif %}>Eucalyptus urograndis</option>
+                                <option value="Eucalyptus camaldulensis" {% if env_type == 'Eucalyptus camaldulensis' %}selected{% endif %}>Eucalyptus camaldulensis</option>
+                                <option value="Soja" {% if env_type == 'Soja' %}selected{% endif %}>Cultura de Soja</option>
+                                <option value="Milho" {% if env_type == 'Milho' %}selected{% endif %}>Cultura de Milho</option>
+                                <option value="Cana-de-Açúcar" {% if env_type == 'Cana-de-Açúcar' %}selected{% endif %}>Cana-de-Açúcar</option>
+                            </optgroup>
                         </select>
                     </div>
 
@@ -63,7 +75,7 @@
                 <strong>{{ weather.humidity }} %</strong>
             </div>
             <div>
-                <small class="text-muted d-block">Precipitação</small>
+                <small class="text-muted d-block">Chuva Acumulada Hoje</small>
                 <strong>{{ weather.rain }} mm</strong>
             </div>
         </div>
@@ -84,35 +96,37 @@
         </ul>
 
         <!-- Conteúdo das Abas -->
-        <div class="tab-content" id="pestTabsContent">
+        <div class="tab-content mb-4" id="pestTabsContent">
 
             <!-- ABA URBANA -->
             <div class="tab-pane fade show active" id="urban" role="tabpanel">
                 <div class="row">
                     {% for item in urban_results %}
                     <div class="col-md-4 mb-3">
-                        <div class="card h-100 shadow-sm border-start border-4
+                        <div class="card h-100 shadow-sm pest-card border-start border-4
                             {% if item.score >= 75 %}border-danger
                             {% elif item.score >= 50 %}border-warning
                             {% elif item.score >= 30 %}border-info
-                            {% else %}border-success{% endif %}">
+                            {% else %}border-success{% endif %}"
+                            onclick="loadMapData('{{ item.key }}', '{{ item.name }}')">
 
                             <div class="card-body">
                                 <span class="badge bg-primary mb-2">Urbana</span>
-                                <h5 class="card-title">{{ item.name }}</h5>
+                                <h5 class="card-title h6">{{ item.name }}</h5>
 
-                                <div class="my-3 text-center">
+                                <div class="my-2 text-center">
                                     <span class="display-6 fw-bold">{{ item.score }}%</span>
-                                    <small class="d-block text-muted">Probabilidade de Ocorrência</small>
+                                    <small class="d-block text-muted">Probabilidade</small>
                                 </div>
 
-                                <p class="card-text text-center fw-bold
+                                <p class="card-text text-center fw-bold mb-1
                                     {% if item.score >= 75 %}text-danger
                                     {% elif item.score >= 50 %}text-warning
                                     {% elif item.score >= 30 %}text-info
                                     {% else %}text-success{% endif %}">
-                                    Status: {{ item.level }}
+                                    {{ item.level }}
                                 </p>
+                                <small class="text-primary d-block text-center mt-2">👇 Clique para ver no mapa de SP</small>
                             </div>
                         </div>
                     </div>
@@ -125,28 +139,30 @@
                 <div class="row">
                     {% for item in agri_results %}
                     <div class="col-md-4 mb-3">
-                        <div class="card h-100 shadow-sm border-start border-4
+                        <div class="card h-100 shadow-sm pest-card border-start border-4
                             {% if item.score >= 75 %}border-danger
                             {% elif item.score >= 50 %}border-warning
                             {% elif item.score >= 30 %}border-info
-                            {% else %}border-success{% endif %}">
+                            {% else %}border-success{% endif %}"
+                            onclick="loadMapData('{{ item.key }}', '{{ item.name }}')">
 
                             <div class="card-body">
                                 <span class="badge bg-success mb-2">Agrícola / Florestal</span>
-                                <h5 class="card-title">{{ item.name }}</h5>
+                                <h5 class="card-title h6">{{ item.name }}</h5>
 
-                                <div class="my-3 text-center">
+                                <div class="my-2 text-center">
                                     <span class="display-6 fw-bold">{{ item.score }}%</span>
-                                    <small class="d-block text-muted">Probabilidade de Ocorrência</small>
+                                    <small class="d-block text-muted">Probabilidade</small>
                                 </div>
 
-                                <p class="card-text text-center fw-bold
+                                <p class="card-text text-center fw-bold mb-1
                                     {% if item.score >= 75 %}text-danger
                                     {% elif item.score >= 50 %}text-warning
                                     {% elif item.score >= 30 %}text-info
                                     {% else %}text-success{% endif %}">
-                                    Status: {{ item.level }}
+                                    {{ item.level }}
                                 </p>
+                                <small class="text-primary d-block text-center mt-2">👇 Clique para ver no mapa de SP</small>
                             </div>
                         </div>
                     </div>
@@ -156,9 +172,65 @@
 
         </div>
 
+        <!-- SEÇÃO DO MAPA INTERATIVO -->
+        <div class="card shadow-sm">
+            <div class="card-header bg-dark text-white fw-bold d-flex justify-content-between align-items-center">
+                <span>🗺️ Mapa de Incidência Regional em São Paulo</span>
+                <span id="selectedPestTitle" class="badge bg-warning text-dark">Clique em uma praga acima</span>
+            </div>
+            <div class="card-body p-0">
+                <div id="map"></div>
+            </div>
+        </div>
+
     </div>
 
-    <!-- JS do Bootstrap para fazer as abas funcionarem -->
+    <!-- JS do Bootstrap e Leaflet -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+        // Inicializar o Mapa do Estado de SP
+        var map = L.map('map').setView([-22.5, -48.5], 7);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        var markersGroup = L.layerGroup().addTo(map);
+
+        function getColor(score) {
+            if (score >= 75) return '#dc3545'; // Vermelho (Crítico)
+            if (score >= 50) return '#fd7e14'; // Laranja (Alto)
+            if (score >= 30) return '#ffc107'; // Amarelo (Médio)
+            return '#198754';                  // Verde (Baixo)
+        }
+
+        function loadMapData(pestKey, pestName) {
+            document.getElementById('selectedPestTitle').innerText = 'Analisando: ' + pestName;
+            markersGroup.clearLayers();
+
+            fetch('/api/pest_map/' + pestKey)
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(item => {
+                        var circle = L.circleMarker([item.lat, item.lon], {
+                            color: getColor(item.score),
+                            fillColor: getColor(item.score),
+                            fillOpacity: 0.7,
+                            radius: 12
+                        }).addTo(markersGroup);
+
+                        circle.bindPopup(
+                            `<strong>${item.city}</strong><br>` +
+                            `Praga: ${pestName}<br>` +
+                            `Risco: <strong>${item.score}%</strong><br>` +
+                            `Status: ${item.level}`
+                        );
+                    });
+                })
+                .catch(err => console.error("Erro ao carregar mapa:", err));
+        }
+    </script>
 </body>
 </html>
