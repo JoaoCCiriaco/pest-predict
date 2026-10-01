@@ -4,7 +4,6 @@ from pest_data import PEST_DATABASE, calculate_pest_risk
 
 app = Flask(__name__)
 
-# Cidades principais com coordenadas pré-configuradas (São Paulo)
 CITIES = {
     "Piracicaba": {"lat": -22.7253, "lon": -47.6492},
     "São Paulo": {"lat": -23.5505, "lon": -46.6333},
@@ -20,11 +19,11 @@ def index():
 
     coords = CITIES.get(selected_city, CITIES["Piracicaba"])
 
-    # Consulta à API de Clima (Open-Meteo)
     url = f"https://api.open-meteo.com/v1/forecast?latitude={coords['lat']}&longitude={coords['lon']}&current=temperature_2m,relative_humidity_2m,rain&timezone=America/Sao_Paulo"
 
     weather_info = None
-    results = []
+    urban_results = []
+    agri_results = []
 
     try:
         response = requests.get(url)
@@ -44,12 +43,18 @@ def index():
                 rain_sum=weather_info["rain"],
                 env_type=env_type
             )
-            results.append({
+
+            item = {
                 "name": pest_info["name"],
                 "category": pest_info["category"],
                 "score": score,
                 "level": level
-            })
+            }
+
+            if pest_info["category"] == "Urbana":
+                urban_results.append(item)
+            else:
+                agri_results.append(item)
 
     except Exception as e:
         print(f"Erro ao consultar clima: {e}")
@@ -60,7 +65,8 @@ def index():
         selected_city=selected_city,
         env_type=env_type,
         weather=weather_info,
-        results=results
+        urban_results=urban_results,
+        agri_results=agri_results
     )
 
 if __name__ == "__main__":
