@@ -209,10 +209,10 @@
 
     <script>
         var esriTileUrl = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}';
-        var esriAttrib = 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), swisstopo, MapmyIndia, &copy; OpenStreetMap contributors';
+        var esriAttrib = 'Tiles &copy; Esri &mdash; OpenStreetMap contributors';
 
         // 1. MAPA URBANO
-        var mapUrban = L.map('mapUrban').setView([-22.5, -48.5], 7);
+        var mapUrban = L.map('mapUrban').setView([-22.3, -48.5], 7);
         L.tileLayer(esriTileUrl, { attribution: esriAttrib, maxZoom: 18 }).addTo(mapUrban);
         var urbanHeatLayer = null;
 
@@ -222,21 +222,35 @@
             fetch('/api/pest_map/' + pestKey)
                 .then(res => res.json())
                 .then(data => {
-                    var heatPoints = data.map(item => [item.lat, item.lon, item.score / 100]);
+                    if (!data || data.length === 0) return;
+
+                    var heatPoints = [];
+                    var bounds = [];
+
+                    data.forEach(item => {
+                        heatPoints.push([item.lat, item.lon, (item.score / 100) * 1.5]);
+                        bounds.push([item.lat, item.lon]);
+                    });
 
                     if (urbanHeatLayer) { mapUrban.removeLayer(urbanHeatLayer); }
 
                     urbanHeatLayer = L.heatLayer(heatPoints, {
-                        radius: 35,
-                        blur: 20,
-                        maxZoom: 10,
-                        gradient: {0.3: 'blue', 0.5: 'lime', 0.7: 'yellow', 0.9: 'red'}
+                        radius: 50,
+                        blur: 25,
+                        maxZoom: 9,
+                        max: 1.0,
+                        gradient: {0.2: 'blue', 0.4: 'lime', 0.6: 'yellow', 0.8: 'red'}
                     }).addTo(mapUrban);
-                });
+
+                    if (bounds.length > 0) {
+                        mapUrban.fitBounds(bounds, { padding: [30, 30] });
+                    }
+                })
+                .catch(err => console.error("Erro ao carregar mapa urbano:", err));
         }
 
         // 2. MAPA AGRÍCOLA / FLORESTAL
-        var mapAgri = L.map('mapAgri').setView([-22.5, -48.5], 7);
+        var mapAgri = L.map('mapAgri').setView([-22.3, -48.5], 7);
         L.tileLayer(esriTileUrl, { attribution: esriAttrib, maxZoom: 18 }).addTo(mapAgri);
         var agriHeatLayer = null;
         var cropCirclesGroup = L.layerGroup().addTo(mapAgri);
@@ -248,31 +262,43 @@
             fetch('/api/pest_map/' + pestKey)
                 .then(res => res.json())
                 .then(data => {
+                    if (!data || data.length === 0) return;
+
                     var heatPoints = [];
+                    var bounds = [];
 
                     data.forEach(item => {
-                        heatPoints.push([item.lat, item.lon, item.score / 100]);
+                        heatPoints.push([item.lat, item.lon, (item.score / 100) * 1.5]);
+                        bounds.push([item.lat, item.lon]);
 
+                        // Marcadores das Culturas Agrícolas
                         L.circleMarker([item.lat, item.lon], {
                             color: item.crop_color,
                             fillColor: item.crop_color,
-                            fillOpacity: 0.6,
-                            radius: 14
-                        }).bindPopup(`<strong>${item.city}</strong><br>Pólo: ${item.crop}<br>Risco: ${item.score}%`).addTo(cropCirclesGroup);
+                            fillOpacity: 0.8,
+                            radius: 16
+                        }).bindPopup(`<strong>${item.city}</strong><br>Pólo: ${item.crop}<br>Risco: <strong>${item.score}%</strong>`).addTo(cropCirclesGroup);
                     });
 
                     if (agriHeatLayer) { mapAgri.removeLayer(agriHeatLayer); }
 
+                    // Mancha de Calor de Suscetibilidade
                     agriHeatLayer = L.heatLayer(heatPoints, {
-                        radius: 40,
-                        blur: 25,
-                        maxZoom: 10,
-                        gradient: {0.4: 'green', 0.6: 'orange', 0.85: 'red'}
+                        radius: 55,
+                        blur: 30,
+                        maxZoom: 9,
+                        max: 1.0,
+                        gradient: {0.3: 'green', 0.55: 'orange', 0.8: 'red'}
                     }).addTo(mapAgri);
-                });
+
+                    if (bounds.length > 0) {
+                        mapAgri.fitBounds(bounds, { padding: [30, 30] });
+                    }
+                })
+                .catch(err => console.error("Erro ao carregar mapa agrícola:", err));
         }
 
-        // Ajustar redimensionamento dos mapas ao alternar de aba no Bootstrap
+        // Reajuste do render de abas no Bootstrap
         document.getElementById('agri-tab').addEventListener('shown.bs.tab', function () {
             mapAgri.invalidateSize();
         });
