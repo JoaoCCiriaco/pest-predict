@@ -134,7 +134,7 @@
                 <!-- MAPA DA ABA URBANA -->
                 <div class="card shadow-sm mb-4">
                     <div class="card-header bg-dark text-white fw-bold d-flex justify-content-between align-items-center">
-                        <span>🗺️ Manchas de Incidência em Áreas Urbanas (SP)</span>
+                        <span>🗺️️ Manchas de Incidência em Áreas Urbanas (SP)</span>
                         <span id="urbanPestTitle" class="badge bg-warning text-dark">Clique em uma praga urbana</span>
                     </div>
                     <div class="card-body p-0">
@@ -211,10 +211,31 @@
         var esriTileUrl = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}';
         var esriAttrib = 'Tiles &copy; Esri &mdash; OpenStreetMap contributors';
 
-        // 1. MAPA URBANO
+        // -------------------------------------------------------------
+        // 1. INICIALIZAÇÃO DO MAPA URBANO
+        // -------------------------------------------------------------
         var mapUrban = L.map('mapUrban').setView([-22.3, -48.5], 7);
         L.tileLayer(esriTileUrl, { attribution: esriAttrib, maxZoom: 18 }).addTo(mapUrban);
         var urbanHeatLayer = null;
+        var urbanCirclesGroup = L.layerGroup().addTo(mapUrban);
+
+        // Carrega o fundo urbano cinza imediatamente
+        function initUrbanBaseMap() {
+            fetch('/api/pest_map/escorpiao_amarelo')
+                .then(res => res.json())
+                .then(data => {
+                    urbanCirclesGroup.clearLayers();
+                    data.forEach(item => {
+                        L.circleMarker([item.lat, item.lon], {
+                            color: '#6c757d',
+                            fillColor: '#6c757d',
+                            fillOpacity: 0.7,
+                            radius: 18
+                        }).bindPopup(`<strong>${item.city}</strong><br>Zona Urbana`).addTo(urbanCirclesGroup);
+                    });
+                });
+        }
+        initUrbanBaseMap();
 
         function loadUrbanHeatmap(pestKey, pestName) {
             document.getElementById('urbanPestTitle').innerText = 'Incidência: ' + pestName;
@@ -222,83 +243,66 @@
             fetch('/api/pest_map/' + pestKey)
                 .then(res => res.json())
                 .then(data => {
-                    if (!data || data.length === 0) return;
-
-                    var heatPoints = [];
-                    var bounds = [];
-
-                    data.forEach(item => {
-                        heatPoints.push([item.lat, item.lon, (item.score / 100) * 1.5]);
-                        bounds.push([item.lat, item.lon]);
-                    });
+                    var heatPoints = data.map(item => [item.lat, item.lon, item.score / 100]);
 
                     if (urbanHeatLayer) { mapUrban.removeLayer(urbanHeatLayer); }
 
                     urbanHeatLayer = L.heatLayer(heatPoints, {
-                        radius: 50,
-                        blur: 25,
+                        radius: 45,
+                        blur: 20,
                         maxZoom: 9,
-                        max: 1.0,
-                        gradient: {0.2: 'blue', 0.4: 'lime', 0.6: 'yellow', 0.8: 'red'}
+                        gradient: {0.3: 'yellow', 0.6: 'orange', 0.9: 'red'}
                     }).addTo(mapUrban);
-
-                    if (bounds.length > 0) {
-                        mapUrban.fitBounds(bounds, { padding: [30, 30] });
-                    }
-                })
-                .catch(err => console.error("Erro ao carregar mapa urbano:", err));
+                });
         }
 
-        // 2. MAPA AGRÍCOLA / FLORESTAL
+        // -------------------------------------------------------------
+        // 2. INICIALIZAÇÃO DO MAPA AGRÍCOLA (MOSAICO FIXO + HEATMAP)
+        // -------------------------------------------------------------
         var mapAgri = L.map('mapAgri').setView([-22.3, -48.5], 7);
         L.tileLayer(esriTileUrl, { attribution: esriAttrib, maxZoom: 18 }).addTo(mapAgri);
         var agriHeatLayer = null;
-        var cropCirclesGroup = L.layerGroup().addTo(mapAgri);
+        var agriCirclesGroup = L.layerGroup().addTo(mapAgri);
+
+        // Carrega o Mosaico Agrícola de Culturas imediatamente ao abrir a aba
+        function initAgriBaseMap() {
+            fetch('/api/pest_map/broca_cana')
+                .then(res => res.json())
+                .then(data => {
+                    agriCirclesGroup.clearLayers();
+                    data.forEach(item => {
+                        L.circleMarker([item.lat, item.lon], {
+                            color: item.crop_color,
+                            fillColor: item.crop_color,
+                            fillOpacity: 0.85,
+                            radius: 20
+                        }).bindPopup(`<strong>${item.city}</strong><br>Pólo Agrícola: <strong>${item.crop}</strong>`).addTo(agriCirclesGroup);
+                    });
+                });
+        }
+        initAgriBaseMap();
 
         function loadAgriHeatmap(pestKey, pestName) {
             document.getElementById('agriPestTitle').innerText = 'Incidência: ' + pestName;
-            cropCirclesGroup.clearLayers();
 
             fetch('/api/pest_map/' + pestKey)
                 .then(res => res.json())
                 .then(data => {
-                    if (!data || data.length === 0) return;
-
-                    var heatPoints = [];
-                    var bounds = [];
-
-                    data.forEach(item => {
-                        heatPoints.push([item.lat, item.lon, (item.score / 100) * 1.5]);
-                        bounds.push([item.lat, item.lon]);
-
-                        // Marcadores das Culturas Agrícolas
-                        L.circleMarker([item.lat, item.lon], {
-                            color: item.crop_color,
-                            fillColor: item.crop_color,
-                            fillOpacity: 0.8,
-                            radius: 16
-                        }).bindPopup(`<strong>${item.city}</strong><br>Pólo: ${item.crop}<br>Risco: <strong>${item.score}%</strong>`).addTo(cropCirclesGroup);
-                    });
+                    var heatPoints = data.map(item => [item.lat, item.lon, item.score / 100]);
 
                     if (agriHeatLayer) { mapAgri.removeLayer(agriHeatLayer); }
 
-                    // Mancha de Calor de Suscetibilidade
+                    // Desenha o Heatmap Vermelho/Laranja sobreposto ao mosaico das culturas
                     agriHeatLayer = L.heatLayer(heatPoints, {
-                        radius: 55,
-                        blur: 30,
+                        radius: 50,
+                        blur: 25,
                         maxZoom: 9,
-                        max: 1.0,
-                        gradient: {0.3: 'green', 0.55: 'orange', 0.8: 'red'}
+                        gradient: {0.4: 'yellow', 0.7: 'orange', 1.0: 'red'}
                     }).addTo(mapAgri);
-
-                    if (bounds.length > 0) {
-                        mapAgri.fitBounds(bounds, { padding: [30, 30] });
-                    }
-                })
-                .catch(err => console.error("Erro ao carregar mapa agrícola:", err));
+                });
         }
 
-        // Reajuste do render de abas no Bootstrap
+        // Reajuste de tamanho ao trocar de aba
         document.getElementById('agri-tab').addEventListener('shown.bs.tab', function () {
             mapAgri.invalidateSize();
         });
