@@ -10,7 +10,7 @@
 </head>
 <body class="bg-light">
 
-    <!-- Barra Superior com Logo e Título em Inglês -->
+    <!-- Barra Superior com Logo e Título -->
     <nav class="navbar navbar-dark bg-dark shadow py-2">
         <div class="container d-flex align-items-center">
             <a class="navbar-brand d-flex align-items-center fw-bold fs-4" href="#">
@@ -20,7 +20,7 @@
         </div>
     </nav>
 
-    <!-- Banner Principal de Topo -->
+    <!-- Banner Principal -->
     <div class="container my-4">
         <div class="card shadow-sm border-0 overflow-hidden">
             <img src="{{ url_for('static', filename='img/banner.jpg') }}" class="img-fluid w-100" alt="Banner PestPredict SP" style="max-height: 280px; object-fit: cover;">
@@ -34,7 +34,7 @@
             <div class="card-body">
                 <form method="POST" class="row g-3 align-items-end">
                     <div class="col-md-5">
-                        <label class="form-label fw-bold">Município (São Paulo):</label>
+                        <label class="form-label fw-bold">Município (São Paulo > 100k hab.):</label>
                         <select name="city" class="form-select">
                             {% for city in cities %}
                                 <option value="{{ city }}" {% if city == selected_city %}selected{% endif %}>{{ city }}</option>
@@ -149,7 +149,7 @@
                         <span id="urbanPestTitle" class="badge bg-warning text-dark">Clique em uma praga urbana</span>
                     </div>
                     <div class="card-body p-0">
-                        <div id="mapUrban" class="map-container"></div>
+                        <div id="mapUrban" class="map-container" style="height: 480px;"></div>
                     </div>
                 </div>
             </div>
@@ -196,15 +196,16 @@
                         <span id="agriPestTitle" class="badge bg-warning text-dark">Clique em uma praga agrícola</span>
                     </div>
                     <div class="card-body p-0">
-                        <div id="mapAgri" class="map-container"></div>
+                        <div id="mapAgri" class="map-container" style="height: 480px;"></div>
                     </div>
-                    <div class="card-footer bg-white d-flex justify-content-around flex-wrap border-0">
-                        <div><span class="legend-dot" style="background: #1b4332;"></span><strong>Eucalipto</strong></div>
-                        <div><span class="legend-dot" style="background: #2ec4b6;"></span><strong>Cana-de-Açúcar</strong></div>
-                        <div><span class="legend-dot" style="background: #7209b7;"></span><strong>Soja</strong></div>
-                        <div><span class="legend-dot" style="background: #ffb703;"></span><strong>Milho</strong></div>
-                        <div><span class="legend-dot" style="background: #ff9f1c;"></span><strong>Citros</strong></div>
-                        <div><span class="legend-dot" style="background: #6c757d;"></span><strong>Área Urbana</strong></div>
+                    <div class="card-footer bg-white d-flex justify-content-around flex-wrap border-0 py-3">
+                        <div><span class="legend-dot" style="background: #1b4332; display:inline-block; width:12px; height:12px; border-radius:50%; margin-right:5px;"></span><strong>Eucalipto</strong></div>
+                        <div><span class="legend-dot" style="background: #2ec4b6; display:inline-block; width:12px; height:12px; border-radius:50%; margin-right:5px;"></span><strong>Cana-de-Açúcar</strong></div>
+                        <div><span class="legend-dot" style="background: #7209b7; display:inline-block; width:12px; height:12px; border-radius:50%; margin-right:5px;"></span><strong>Soja</strong></div>
+                        <div><span class="legend-dot" style="background: #ffb703; display:inline-block; width:12px; height:12px; border-radius:50%; margin-right:5px;"></span><strong>Milho</strong></div>
+                        <div><span class="legend-dot" style="background: #ff9f1c; display:inline-block; width:12px; height:12px; border-radius:50%; margin-right:5px;"></span><strong>Citros</strong></div>
+                        <div><span class="legend-dot" style="background: #6f4e37; display:inline-block; width:12px; height:12px; border-radius:50%; margin-right:5px;"></span><strong>Café</strong></div>
+                        <div><span class="legend-dot" style="background: #2a9d8f; display:inline-block; width:12px; height:12px; border-radius:50%; margin-right:5px;"></span><strong>Hortifrúti / Fruticultura</strong></div>
                     </div>
                 </div>
             </div>
@@ -233,13 +234,16 @@
                 .then(data => {
                     urbanBaseGroup.clearLayers();
                     data.forEach(item => {
-                        L.circle([item.lat, item.lon], {
-                            color: '#6c757d',
-                            fillColor: '#6c757d',
-                            fillOpacity: 0.35,
-                            radius: 25000,
-                            stroke: false
-                        }).bindPopup(`<strong>${item.city}</strong><br>Zona Urbana`).addTo(urbanBaseGroup);
+                        // Na aba urbana, exibimos apenas locais urbanos
+                        if (item.crop === "Área Urbana") {
+                            L.circle([item.lat, item.lon], {
+                                color: '#6c757d',
+                                fillColor: '#6c757d',
+                                fillOpacity: 0.35,
+                                radius: 22000,
+                                stroke: false
+                            }).bindPopup(`<strong>${item.city}</strong><br>Zona Urbana`).addTo(urbanBaseGroup);
+                        }
                     });
                 });
         }
@@ -280,13 +284,16 @@
                 .then(data => {
                     agriCropGroup.clearLayers();
                     data.forEach(item => {
-                        L.circle([item.lat, item.lon], {
-                            color: item.crop_color,
-                            fillColor: item.crop_color,
-                            fillOpacity: 0.45,
-                            radius: 30000,
-                            stroke: false
-                        }).bindPopup(`<strong>${item.city}</strong><br>Pólo Agrícola: <strong>${item.crop}</strong>`).addTo(agriCropGroup);
+                        // FILTRO APLICADO: Ignora "Área Urbana" para ocultar as manchas cinzentas na aba agrícola
+                        if (item.crop !== "Área Urbana") {
+                            L.circle([item.lat, item.lon], {
+                                color: item.crop_color,
+                                fillColor: item.crop_color,
+                                fillOpacity: 0.55,
+                                radius: 28000,
+                                stroke: false
+                            }).bindPopup(`<strong>${item.city}</strong><br>Pólo Agrícola: <strong>${item.crop}</strong>`).addTo(agriCropGroup);
+                        }
                     });
                 });
         }
@@ -314,6 +321,7 @@
                 });
         }
 
+        // Ajuste no redimensionamento dos mapas ao alternar as abas
         document.getElementById('agri-tab').addEventListener('shown.bs.tab', function () {
             mapAgri.invalidateSize();
         });
