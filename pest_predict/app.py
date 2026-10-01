@@ -5,9 +5,29 @@ from pest_data import PEST_DATABASE, calculate_pest_risk
 
 app = Flask(__name__)
 
-# Carrega cidades a partir do ficheiro JSON
+# Carrega a lista de municípios do JSON
 with open("cities_sp.json", "r", encoding="utf-8") as f:
     CITIES = json.load(f)
+
+# Definição das Macro-Regiões Predominantes de Culturas em SP para o Mosaico
+CROP_REGIONS = {
+    "Ribeirão Preto": {"crop": "Cana-de-Açúcar", "color": "#2ec4b6"},
+    "Piracicaba": {"crop": "Cana-de-Açúcar", "color": "#2ec4b6"},
+    "Araraquara": {"crop": "Cana-de-Açúcar", "color": "#2ec4b6"},
+    "Limeira": {"crop": "Citros", "color": "#ff9f1c"},
+    "Barretos": {"crop": "Citros", "color": "#ff9f1c"},
+    "Botucatu": {"crop": "Eucalipto", "color": "#1b4332"},
+    "Itapetininga": {"crop": "Eucalipto", "color": "#1b4332"},
+    "São José dos Campos": {"crop": "Eucalipto", "color": "#1b4332"},
+    "Marília": {"crop": "Soja", "color": "#7209b7"},
+    "Presidente Prudente": {"crop": "Soja", "color": "#7209b7"},
+    "Itapeva": {"crop": "Soja", "color": "#7209b7"},
+    "Bauru": {"crop": "Milho", "color": "#ffb703"},
+    "Araçatuba": {"crop": "Milho", "color": "#ffb703"},
+    "São Paulo": {"crop": "Urbana", "color": "#6c757d"},
+    "Campinas": {"crop": "Urbana", "color": "#6c757d"},
+    "Santos": {"crop": "Urbana", "color": "#6c757d"}
+}
 
 @app.route("/", methods=["GET", "POST"])
 def index():
@@ -69,7 +89,7 @@ def index():
         agri_results=agri_results
     )
 
-# Rota API para gerar os pontos do mapa de incidência por praga
+# Rota de dados geográficos e calor para os mapas
 @app.route("/api/pest_map/<pest_key>")
 def pest_map_data(pest_key):
     map_data = []
@@ -82,12 +102,17 @@ def pest_map_data(pest_key):
             rain = res["daily"]["rain_sum"][0] if "daily" in res and "rain_sum" in res["daily"] else 0.0
 
             score, level = calculate_pest_risk(pest_key, temp, humidity, rain, "Residência")
+
+            crop_info = CROP_REGIONS.get(city_name, {"crop": "Outras", "color": "#adb5bd"})
+
             map_data.append({
                 "city": city_name,
                 "lat": coords["lat"],
                 "lon": coords["lon"],
                 "score": score,
-                "level": level
+                "level": level,
+                "crop": crop_info["crop"],
+                "crop_color": crop_info["color"]
             })
         except Exception:
             continue

@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PestPredict SP - Previsão Preditiva de Pragas</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-
-    <!-- Leaflet CSS para o Mapa -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
@@ -96,11 +94,11 @@
         </ul>
 
         <!-- Conteúdo das Abas -->
-        <div class="tab-content mb-4" id="pestTabsContent">
+        <div class="tab-content" id="pestTabsContent">
 
             <!-- ABA URBANA -->
             <div class="tab-pane fade show active" id="urban" role="tabpanel">
-                <div class="row">
+                <div class="row mb-4">
                     {% for item in urban_results %}
                     <div class="col-md-4 mb-3">
                         <div class="card h-100 shadow-sm pest-card border-start border-4
@@ -108,7 +106,7 @@
                             {% elif item.score >= 50 %}border-warning
                             {% elif item.score >= 30 %}border-info
                             {% else %}border-success{% endif %}"
-                            onclick="loadMapData('{{ item.key }}', '{{ item.name }}')">
+                            onclick="loadUrbanHeatmap('{{ item.key }}', '{{ item.name }}')">
 
                             <div class="card-body">
                                 <span class="badge bg-primary mb-2">Urbana</span>
@@ -126,17 +124,28 @@
                                     {% else %}text-success{% endif %}">
                                     {{ item.level }}
                                 </p>
-                                <small class="text-primary d-block text-center mt-2">👇 Clique para ver no mapa de SP</small>
+                                <small class="text-primary d-block text-center mt-2">👇 Clique para ver manchas de incidência no mapa</small>
                             </div>
                         </div>
                     </div>
                     {% endfor %}
                 </div>
+
+                <!-- MAPA DA ABA URBANA -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-dark text-white fw-bold d-flex justify-content-between align-items-center">
+                        <span>🗺️ Manchas de Incidência em Áreas Urbanas (SP)</span>
+                        <span id="urbanPestTitle" class="badge bg-warning text-dark">Clique em uma praga urbana</span>
+                    </div>
+                    <div class="card-body p-0">
+                        <div id="mapUrban" class="map-container"></div>
+                    </div>
+                </div>
             </div>
 
             <!-- ABA AGRÍCOLA / FLORESTAL -->
             <div class="tab-pane fade" id="agri" role="tabpanel">
-                <div class="row">
+                <div class="row mb-4">
                     {% for item in agri_results %}
                     <div class="col-md-4 mb-3">
                         <div class="card h-100 shadow-sm pest-card border-start border-4
@@ -144,7 +153,7 @@
                             {% elif item.score >= 50 %}border-warning
                             {% elif item.score >= 30 %}border-info
                             {% else %}border-success{% endif %}"
-                            onclick="loadMapData('{{ item.key }}', '{{ item.name }}')">
+                            onclick="loadAgriHeatmap('{{ item.key }}', '{{ item.name }}')">
 
                             <div class="card-body">
                                 <span class="badge bg-success mb-2">Agrícola / Florestal</span>
@@ -162,78 +171,112 @@
                                     {% else %}text-success{% endif %}">
                                     {{ item.level }}
                                 </p>
-                                <small class="text-primary d-block text-center mt-2">👇 Clique para ver no mapa de SP</small>
+                                <small class="text-primary d-block text-center mt-2">👇 Clique para ver manchas de incidência no mapa</small>
                             </div>
                         </div>
                     </div>
                     {% endfor %}
                 </div>
+
+                <!-- MAPA DA ABA AGRÍCOLA -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-dark text-white fw-bold d-flex justify-content-between align-items-center">
+                        <span>🌾 Mosaico de Culturas & Manchas de Suscetibilidade Agrícola (SP)</span>
+                        <span id="agriPestTitle" class="badge bg-warning text-dark">Clique em uma praga agrícola</span>
+                    </div>
+                    <div class="card-body p-0">
+                        <div id="mapAgri" class="map-container"></div>
+                    </div>
+                    <div class="card-footer bg-white d-flex justify-content-around flex-wrap">
+                        <div><span class="legend-dot" style="background: #1b4332;"></span><strong>Eucalipto</strong></div>
+                        <div><span class="legend-dot" style="background: #2ec4b6;"></span><strong>Cana-de-Açúcar</strong></div>
+                        <div><span class="legend-dot" style="background: #7209b7;"></span><strong>Soja</strong></div>
+                        <div><span class="legend-dot" style="background: #ffb703;"></span><strong>Milho</strong></div>
+                        <div><span class="legend-dot" style="background: #ff9f1c;"></span><strong>Citros</strong></div>
+                        <div><span class="legend-dot" style="background: #6c757d;"></span><strong>Área Urbana</strong></div>
+                    </div>
+                </div>
             </div>
 
-        </div>
-
-        <!-- SEÇÃO DO MAPA INTERATIVO -->
-        <div class="card shadow-sm">
-            <div class="card-header bg-dark text-white fw-bold d-flex justify-content-between align-items-center">
-                <span>🗺️ Mapa de Incidência Regional em São Paulo</span>
-                <span id="selectedPestTitle" class="badge bg-warning text-dark">Clique em uma praga acima</span>
-            </div>
-            <div class="card-body p-0">
-                <div id="map"></div>
-            </div>
         </div>
 
     </div>
 
-    <!-- JS do Bootstrap e Leaflet -->
+    <!-- JS do Bootstrap, Leaflet e Leaflet.heat -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
 
     <script>
-        // Inicializar o Mapa do Estado de SP
-        var map = L.map('map').setView([-22.5, -48.5], 7);
+        // 1. MAPA URBANO
+        var mapUrban = L.map('mapUrban').setView([-22.5, -48.5], 7);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { maxZoom: 19 }).addTo(mapUrban);
+        var urbanHeatLayer = null;
 
-        // Servidor de mapa CartoDB Positron (Livre de bloqueios no Codespaces)
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-            subdomains: 'abcd',
-            maxZoom: 19
-        }).addTo(map);
-
-        var markersGroup = L.layerGroup().addTo(map);
-
-        function getColor(score) {
-            if (score >= 75) return '#dc3545'; // Vermelho (Crítico)
-            if (score >= 50) return '#fd7e14'; // Laranja (Alto)
-            if (score >= 30) return '#ffc107'; // Amarelo (Médio)
-            return '#198754';                  // Verde (Baixo)
-        }
-
-        function loadMapData(pestKey, pestName) {
-            document.getElementById('selectedPestTitle').innerText = 'Analisando: ' + pestName;
-            markersGroup.clearLayers();
+        function loadUrbanHeatmap(pestKey, pestName) {
+            document.getElementById('urbanPestTitle').innerText = 'Incidência: ' + pestName;
 
             fetch('/api/pest_map/' + pestKey)
-                .then(response => response.json())
+                .then(res => res.json())
                 .then(data => {
-                    data.forEach(item => {
-                        var circle = L.circleMarker([item.lat, item.lon], {
-                            color: getColor(item.score),
-                            fillColor: getColor(item.score),
-                            fillOpacity: 0.7,
-                            radius: 12
-                        }).addTo(markersGroup);
+                    var heatPoints = data.map(item => [item.lat, item.lon, item.score / 100]);
 
-                        circle.bindPopup(
-                            `<strong>${item.city}</strong><br>` +
-                            `Praga: ${pestName}<br>` +
-                            `Risco: <strong>${item.score}%</strong><br>` +
-                            `Status: ${item.level}`
-                        );
-                    });
-                })
-                .catch(err => console.error("Erro ao carregar mapa:", err));
+                    if (urbanHeatLayer) { mapUrban.removeLayer(urbanHeatLayer); }
+
+                    urbanHeatLayer = L.heatLayer(heatPoints, {
+                        radius: 35,
+                        blur: 20,
+                        maxZoom: 10,
+                        gradient: {0.3: 'blue', 0.5: 'lime', 0.7: 'yellow', 0.9: 'red'}
+                    }).addTo(mapUrban);
+                });
         }
+
+        // 2. MAPA AGRÍCOLA / FLORESTAL
+        var mapAgri = L.map('mapAgri').setView([-22.5, -48.5], 7);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { maxZoom: 19 }).addTo(mapAgri);
+        var agriHeatLayer = null;
+        var cropCirclesGroup = L.layerGroup().addTo(mapAgri);
+
+        function loadAgriHeatmap(pestKey, pestName) {
+            document.getElementById('agriPestTitle').innerText = 'Incidência: ' + pestName;
+            cropCirclesGroup.clearLayers();
+
+            fetch('/api/pest_map/' + pestKey)
+                .then(res => res.json())
+                .then(data => {
+                    var heatPoints = [];
+
+                    data.forEach(item => {
+                        heatPoints.push([item.lat, item.lon, item.score / 100]);
+
+                        // Desenha círculos representando a cultura regional
+                        L.circleMarker([item.lat, item.lon], {
+                            color: item.crop_color,
+                            fillColor: item.crop_color,
+                            fillOpacity: 0.6,
+                            radius: 14
+                        }).bindPopup(`<strong>${item.city}</strong><br>Pólo: ${item.crop}<br>Risco: ${item.score}%`).addTo(cropCirclesGroup);
+                    });
+
+                    if (agriHeatLayer) { mapAgri.removeLayer(agriHeatLayer); }
+
+                    agriHeatLayer = L.heatLayer(heatPoints, {
+                        radius: 40,
+                        blur: 25,
+                        maxZoom: 10,
+                        gradient: {0.4: 'green', 0.6: 'orange', 0.85: 'red'}
+                    }).addTo(mapAgri);
+                });
+        }
+
+        // Ajustar redimensionamento dos mapas ao alternar de aba no Bootstrap
+        document.getElementById('agri-tab').addEventListener('shown.bs.tab', function () {
+            mapAgri.invalidateSize();
+        });
+        document.getElementById('urban-tab').addEventListener('shown.bs.tab', function () {
+            mapUrban.invalidateSize();
+        });
     </script>
 </body>
 </html>
