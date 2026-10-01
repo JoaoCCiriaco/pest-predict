@@ -117,3 +117,7 @@ O objetivo deste projeto é criar uma ferramenta simples e prática para auxilia
 A aplicação busca centralizar os registros de clientes, caixas e inspeções, facilitar o acompanhamento do consumo de isca e manter um histórico organizado das atividades realizadas em cada caixa.
 
 Além disso, o uso de QR Codes foi pensado para aproximar o sistema da rotina de trabalho em campo, tornando o registro de uma inspeção mais rápido e reduzindo a necessidade de procurar manualmente uma caixa dentro do sistema.
+
+
+VIDEO: 
+https://youtu.be/YRD8hG1N2X8
