@@ -208,9 +208,12 @@
     <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
 
     <script>
+        var esriTileUrl = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}';
+        var esriAttrib = 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), swisstopo, MapmyIndia, &copy; OpenStreetMap contributors';
+
         // 1. MAPA URBANO
         var mapUrban = L.map('mapUrban').setView([-22.5, -48.5], 7);
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { maxZoom: 19 }).addTo(mapUrban);
+        L.tileLayer(esriTileUrl, { attribution: esriAttrib, maxZoom: 18 }).addTo(mapUrban);
         var urbanHeatLayer = null;
 
         function loadUrbanHeatmap(pestKey, pestName) {
@@ -234,7 +237,7 @@
 
         // 2. MAPA AGRÍCOLA / FLORESTAL
         var mapAgri = L.map('mapAgri').setView([-22.5, -48.5], 7);
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { maxZoom: 19 }).addTo(mapAgri);
+        L.tileLayer(esriTileUrl, { attribution: esriAttrib, maxZoom: 18 }).addTo(mapAgri);
         var agriHeatLayer = null;
         var cropCirclesGroup = L.layerGroup().addTo(mapAgri);
 
@@ -250,7 +253,6 @@
                     data.forEach(item => {
                         heatPoints.push([item.lat, item.lon, item.score / 100]);
 
-                        // Desenha círculos representando a cultura regional
                         L.circleMarker([item.lat, item.lon], {
                             color: item.crop_color,
                             fillColor: item.crop_color,
