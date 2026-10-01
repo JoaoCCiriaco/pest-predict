@@ -1,3 +1,5 @@
+import datetime
+
 PEST_DATABASE = {
     # --- PRAGAS URBANAS ---
     "escorpiao_amarelo": {
@@ -12,7 +14,7 @@ PEST_DATABASE = {
         "category": "Urbana",
         "breeding_months": [11, 12, 1, 2, 3, 4],
         "ideal_temp_min": 25.0, "ideal_temp_max": 32.0, "min_humidity": 70, "rain_threshold_mm": 10.0,
-        "high_risk_environments": ["Residência", "Comércio", "Próximo a Córrego"]
+        "high_risk_environments": ["Residência", "Comércio", "Próximo a APP/Córrego"]
     },
     "barata_esgoto": {
         "name": "Barata-de-Esgoto (Periplaneta americana)",
@@ -24,16 +26,16 @@ PEST_DATABASE = {
     "rato_esgoto": {
         "name": "Rato-de-Esgoto / Ratazana (Rattus norvegicus)",
         "category": "Urbana",
-        "breeding_months": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], # Todo o ano
+        "breeding_months": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
         "ideal_temp_min": 20.0, "ideal_temp_max": 32.0, "min_humidity": 50, "rain_threshold_mm": 25.0,
         "high_risk_environments": ["Comércio", "Próximo a APP/Córrego"]
     },
 
     # --- PRAGAS AGRÍCOLAS E FLORESTAIS ---
     "sauva_limoeira": {
-        "name": "Formiga Saúva (Atta sexdens) - Cortadeira",
+        "name": "Formiga Saúva (Atta sexdens)",
         "category": "Agrícola/Florestal",
-        "breeding_months": [9, 10, 11, 12], # Revoada na primavera
+        "breeding_months": [9, 10, 11, 12],
         "ideal_temp_min": 22.0, "ideal_temp_max": 30.0, "min_humidity": 65, "rain_threshold_mm": 15.0,
         "high_risk_environments": ["Eucalyptus grandis", "Eucalyptus urograndis", "Soja", "Milho"]
     },
@@ -62,7 +64,7 @@ PEST_DATABASE = {
         "name": "Fungo Ferrugem-Asiática (Phakopsora pachyrhizi)",
         "category": "Agrícola/Florestal",
         "breeding_months": [11, 12, 1, 2, 3],
-        "ideal_temp_min": 18.0, "ideal_temp_max": 26.0, "min_humidity": 80, "rain_threshold_mm": 30.0, # Exige alta umidade
+        "ideal_temp_min": 18.0, "ideal_temp_max": 26.0, "min_humidity": 80, "rain_threshold_mm": 30.0,
         "high_risk_environments": ["Soja"]
     },
     "lagarta_cartucho_milho": {
@@ -73,3 +75,39 @@ PEST_DATABASE = {
         "high_risk_environments": ["Milho", "Soja"]
     }
 }
+
+def calculate_pest_risk(pest_key, temp, humidity, rain_sum, env_type):
+    if pest_key not in PEST_DATABASE:
+        return 0, "Praga não encontrada"
+
+    pest = PEST_DATABASE[pest_key]
+    score = 0
+    current_month = datetime.datetime.now().month
+
+    if current_month in pest["breeding_months"]:
+        score += 30
+
+    if pest["ideal_temp_min"] <= temp <= pest["ideal_temp_max"]:
+        score += 25
+    elif abs(temp - pest["ideal_temp_min"]) <= 3:
+        score += 10
+
+    if humidity >= pest["min_humidity"]:
+        score += 20
+
+    if rain_sum >= pest["rain_threshold_mm"]:
+        score += 15
+
+    if env_type in pest["high_risk_environments"]:
+        score += 10
+
+    if score >= 75:
+        level = "CRÍTICO (Alerta Vermelho)"
+    elif score >= 50:
+        level = "ALTO (Alerta Laranja)"
+    elif score >= 30:
+        level = "MÉDIO (Alerta Amarelo)"
+    else:
+        level = "BAIXO (Alerta Verde)"
+
+    return score, level

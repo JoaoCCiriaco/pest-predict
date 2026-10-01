@@ -1,17 +1,13 @@
-from flask import Flask, render_template, request
+import json
+from flask import Flask, render_template, request, jsonify
 import requests
 from pest_data import PEST_DATABASE, calculate_pest_risk
 
-# A linha abaixo DEVE vir antes de qualquer @app.route
 app = Flask(__name__)
 
-CITIES = {
-    "Piracicaba": {"lat": -22.7253, "lon": -47.6492},
-    "São Paulo": {"lat": -23.5505, "lon": -46.6333},
-    "Campinas": {"lat": -22.9056, "lon": -47.0608},
-    "Ribeirão Preto": {"lat": -21.1704, "lon": -47.8103},
-    "Bauru": {"lat": -22.3147, "lon": -49.0606}
-}
+# Carrega cidades a partir do ficheiro JSON
+with open("cities_sp.json", "r", encoding="utf-8") as f:
+    CITIES = json.load(f)
 
 @app.route("/", methods=["GET", "POST"])
 def index():
@@ -48,6 +44,7 @@ def index():
             )
 
             item = {
+                "key": pest_key,
                 "name": pest_info["name"],
                 "category": pest_info["category"],
                 "score": score,
@@ -64,13 +61,38 @@ def index():
 
     return render_template(
         "index.html",
-        cities=CITIES.keys(),
+        cities=sorted(CITIES.keys()),
         selected_city=selected_city,
         env_type=env_type,
         weather=weather_info,
         urban_results=urban_results,
         agri_results=agri_results
     )
+
+# Rota API para gerar os pontos do mapa de incidência por praga
+@app.route("/api/pest_map/<pest_key>")
+def pest_map_data(pest_key):
+    map_data = []
+    for city_name, coords in CITIES.items():
+        try:
+            url = f"https://api.open-meteo.com/v1/forecast?latitude={coords['lat']}&longitude={coords['lon']}&current=temperature_2m,relative_humidity_2m&daily=rain_sum&timezone=America/Sao_Paulo"
+            res = requests.get(url).json()
+            temp = res["current"]["temperature_2m"]
+            humidity = res["current"]["relative_humidity_2m"]
+            rain = res["daily"]["rain_sum"][0] if "daily" in res and "rain_sum" in res["daily"] else 0.0
+
+            score, level = calculate_pest_risk(pest_key, temp, humidity, rain, "Residência")
+            map_data.append({
+                "city": city_name,
+                "lat": coords["lat"],
+                "lon": coords["lon"],
+                "score": score,
+                "level": level
+            })
+        except Exception:
+            continue
+
+    return jsonify(map_data)
 
 if __name__ == "__main__":
     app.run(debug=True)
