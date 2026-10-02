@@ -1,85 +1,285 @@
 <!DOCTYPE html>
+
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PestPredict SP - Geospatial Predictive Intelligence</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="static/styles.css">
+
+```
+<title>PestPredict SP - Geospatial Predictive Intelligence</title>
+
+<!-- Bootstrap -->
+<link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+>
+
+<!-- Custom CSS -->
+<link rel="stylesheet" href="static/styles.css">
+```
+
 </head>
+
 <body class="bg-light">
 
-    <!-- Top Navigation Bar -->
-    <nav class="navbar navbar-dark bg-dark shadow py-2">
-        <div class="container d-flex align-items-center justify-content-between">
-            <a class="navbar-brand d-flex align-items-center fw-bold fs-4" href="#">
-                <img src="pest_predict/static/img/logo.png" alt="PestPredict SP Logo" height="45" class="d-inline-block align-text-top me-3 bg-white p-1 rounded">
-                PestPredict SP
-            </a>
-            <span class="badge bg-success px-3 py-2">Portfolio Project</span>
-        </div>
-    </nav>
+```
+<!-- Top Navigation Bar -->
+<nav class="navbar navbar-dark bg-dark shadow py-2">
+    <div class="container d-flex align-items-center justify-content-between">
 
-    <!-- Header Banner -->
-    <div class="container my-4">
-        <div class="card shadow-sm border-0 overflow-hidden">
-            <img src="pest_predict/static/img/banner.jpg" class="img-fluid w-100" alt="PestPredict SP Banner" style="max-height: 280px; object-fit: cover;">
-        </div>
+        <a class="navbar-brand d-flex align-items-center fw-bold fs-4" href="#">
+            <img
+                src="static/img/logo.png"
+                alt="PestPredict SP Logo"
+                height="45"
+                class="d-inline-block align-text-top me-3 bg-white p-1 rounded"
+            >
+            PestPredict SP
+        </a>
+
+        <span class="badge bg-success px-3 py-2">
+            Portfolio Project
+        </span>
+
     </div>
+</nav>
 
-    <!-- About Platform & Video Demonstration Section -->
-    <div class="container mb-5">
-        <div class="row align-items-center g-4">
 
-            <!-- Left Column: Project Overview -->
-            <div class="col-lg-7">
-                <h3 class="fw-bold text-dark mb-3">About the Platform</h3>
-                <p class="text-secondary leading-relaxed">
-                    <strong>PestPredict SP</strong> is a geospatial predictive intelligence platform engineered to map and forecast infestation risks for both urban vectors and agricultural/forestry pests across the State of São Paulo, Brazil.
+<!-- Header Banner -->
+<div class="container my-4">
+    <div class="card shadow-sm border-0 overflow-hidden">
+
+        <img
+            src="static/img/banner.jpg"
+            class="img-fluid w-100"
+            alt="PestPredict SP Banner"
+            style="max-height: 280px; object-fit: cover;"
+        >
+
+    </div>
+</div>
+
+
+<!-- Main Content -->
+<div class="container mb-5">
+
+    <div class="row align-items-start g-4">
+
+        <!-- LEFT COLUMN -->
+        <div class="col-lg-7">
+
+            <!-- Project Overview -->
+            <div class="mb-4">
+
+                <h3 class="fw-bold text-dark mb-3">
+                    About the Platform
+                </h3>
+
+                <p class="text-secondary lh-lg">
+                    <strong>PestPredict SP</strong> is a geospatial predictive
+                    intelligence platform engineered to map and forecast
+                    infestation risks for both urban vectors and
+                    agricultural/forestry pests across the State of São Paulo,
+                    Brazil.
                 </p>
-                <p class="text-secondary leading-relaxed">
-                    By cross-referencing real-time weather data (temperature, relative humidity, and accumulated precipitation) via the Open-Meteo API with bio-climatic thresholds and pest phenology, the application calculates regional susceptibility for key species such as <em>Tityus serrulatus</em> (yellow scorpion), <em>Diatraea saccharalis</em> (sugarcane borer), and major silviculture pests.
+
+                <p class="text-secondary lh-lg">
+                    By cross-referencing real-time weather data
+                    (temperature, relative humidity, and accumulated
+                    precipitation) via the Open-Meteo API with bio-climatic
+                    thresholds and pest phenology, the application calculates
+                    regional susceptibility for key species such as
+                    <em>Tityus serrulatus</em> (yellow scorpion),
+                    <em>Diatraea saccharalis</em> (sugarcane borer),
+                    and major silviculture pests.
                 </p>
+
+                <!-- Technologies -->
                 <div class="d-flex flex-wrap gap-2 mt-3">
-                    <span class="badge bg-dark px-3 py-2">Python (Flask)</span>
-                    <span class="badge bg-primary px-3 py-2">Leaflet.js (GIS)</span>
-                    <span class="badge bg-success px-3 py-2">Open-Meteo API</span>
-                    <span class="badge bg-warning text-dark px-3 py-2">Bootstrap 5</span>
+
+                    <span class="badge bg-dark px-3 py-2">
+                        Python (Flask)
+                    </span>
+
+                    <span class="badge bg-primary px-3 py-2">
+                        Leaflet.js (GIS)
+                    </span>
+
+                    <span class="badge bg-success px-3 py-2">
+                        Open-Meteo API
+                    </span>
+
+                    <span class="badge bg-warning text-dark px-3 py-2">
+                        Bootstrap 5
+                    </span>
+
                 </div>
+
             </div>
 
-            <!-- Right Column: Working Video Embed -->
-            <div class="col-lg-5">
-                <div class="card shadow-sm border-0 rounded-3 overflow-hidden">
-                    <div class="card-header bg-dark text-white fw-bold py-2 d-flex align-items-center">
-                        <span class="me-2">▶️️</span> Video Demonstration
-                    </div>
-                    <div class="card-body p-0">
-                        <div class="ratio ratio-16x9">
-                            <iframe src="https://www.youtube-nocookie.com/embed/1BaRJYVeAzE"
-                                    title="PestPredict SP Video Demonstration"
-                                    frameborder="0"
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                    referrerpolicy="strict-origin-when-cross-origin"
-                                    allowfullscreen></iframe>
+
+            <!-- Key Features -->
+            <div class="row g-4">
+
+                <!-- Feature 1 -->
+                <div class="col-md-4 col-lg-12">
+
+                    <div class="card h-100 border-0 shadow-sm bg-white p-4 rounded-4">
+
+                        <div class="d-flex align-items-center mb-3">
+
+                            <div
+                                class="badge bg-warning bg-opacity-25 text-warning p-3 rounded-circle me-3 fs-3"
+                                style="color: #ffc107 !important;"
+                            >
+                                ⚙️
+                            </div>
+
+                            <h5 class="fw-bold mb-0 text-dark">
+                                Data & Engine Pipeline
+                            </h5>
+
                         </div>
+
+                        <p class="text-secondary small mb-0">
+                            Core Python architecture processing bioclimatic
+                            thresholds and executing predictive pest risk
+                            logic automatically.
+                        </p>
+
                     </div>
-                    <div class="card-footer bg-white text-muted text-center small py-2 border-0">
-                        Practical walkthrough of GIS architecture & predictive capabilities
-                    </div>
+
                 </div>
+
+
+                <!-- Feature 2 -->
+                <div class="col-md-4 col-lg-12">
+
+                    <div class="card h-100 border-0 shadow-sm bg-white p-4 rounded-4">
+
+                        <div class="d-flex align-items-center mb-3">
+
+                            <div
+                                class="badge bg-success bg-opacity-10 text-success p-3 rounded-circle me-3 fs-3"
+                            >
+                                🌦️
+                            </div>
+
+                            <h5 class="fw-bold mb-0 text-dark">
+                                Live Bioclimatic Data
+                            </h5>
+
+                        </div>
+
+                        <p class="text-secondary small mb-0">
+                            Real-time Open-Meteo API data ingestion tracking
+                            temperature, humidity, and rainfall per
+                            municipality.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Feature 3 -->
+                <div class="col-md-4 col-lg-12">
+
+                    <div class="card h-100 border-0 shadow-sm bg-white p-4 rounded-4">
+
+                        <div class="d-flex align-items-center mb-3">
+
+                            <div
+                                class="badge bg-primary bg-opacity-10 text-primary p-3 rounded-circle me-3 fs-3"
+                            >
+                                🗺️
+                            </div>
+
+                            <h5 class="fw-bold mb-0 text-dark">
+                                Geospatial Analytics
+                            </h5>
+
+                        </div>
+
+                        <p class="text-secondary small mb-0">
+                            Interactive Leaflet.js GIS dashboard providing
+                            spatial risk mapping and regional infestation
+                            insights.
+                        </p>
+
+                    </div>
+
+                </div>
+
             </div>
 
         </div>
+
+
+        <!-- RIGHT COLUMN -->
+        <div class="col-lg-5">
+
+            <!-- Video Demonstration -->
+            <div class="card shadow-sm border-0 rounded-3 overflow-hidden">
+
+                <div
+                    class="card-header bg-dark text-white fw-bold py-2 d-flex align-items-center"
+                >
+                    <span class="me-2">▶️</span>
+                    Video Demonstration
+                </div>
+
+                <div class="card-body p-0">
+
+                    <div class="ratio ratio-16x9">
+
+                        <iframe
+                            src="https://www.youtube-nocookie.com/embed/1BaRJYVeAzE"
+                            title="PestPredict SP Video Demonstration"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            referrerpolicy="strict-origin-when-cross-origin"
+                            allowfullscreen
+                        ></iframe>
+
+                    </div>
+
+                </div>
+
+                <div class="card-footer bg-white text-muted text-center small py-2 border-0">
+                    Practical walkthrough of GIS architecture & predictive capabilities
+                </div>
+
+            </div>
+
+        </div>
+
     </div>
 
-    <!-- Footer -->
-    <footer class="bg-dark text-white text-center py-3">
-        <div class="container">
-            <small>PestPredict SP &copy; 2026 — Environmental Data Science & Pest Intelligence Portfolio</small>
-        </div>
-    </footer>
+</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Footer -->
+<footer class="bg-dark text-white text-center py-3">
+
+    <div class="container">
+
+        <small>
+            PestPredict SP &copy; 2026 — Environmental Data Science & Pest Intelligence Portfolio
+        </small>
+
+    </div>
+
+</footer>
+
+
+<!-- Bootstrap JavaScript -->
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+></script>
+```
+
 </body>
 </html>
+
