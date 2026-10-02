@@ -1,43 +1,44 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PestPredict SP - Predictive Pest Intelligence</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="pest_predict/static/styles.css">
 </head>
 <body class="bg-light">
 
-    <!-- Barra Superior com Logo e Título -->
+    <!-- Top Navigation Bar -->
     <nav class="navbar navbar-dark bg-dark shadow py-2">
         <div class="container d-flex align-items-center">
             <a class="navbar-brand d-flex align-items-center fw-bold fs-4" href="#">
-                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo PestPredict SP" height="45" class="d-inline-block align-text-top me-3 bg-white p-1 rounded">
+                <img src="pest_predict/static/img/logo.png" alt="PestPredict SP Logo" height="45" class="d-inline-block align-text-top me-3 bg-white p-1 rounded">
                 PestPredict SP - Predictive Pest Intelligence
             </a>
         </div>
     </nav>
 
-    <!-- Banner Principal -->
+    <!-- Main Header Banner -->
     <div class="container my-4">
         <div class="card shadow-sm border-0 overflow-hidden">
-            <img src="{{ url_for('static', filename='img/banner.jpg') }}" class="img-fluid w-100" alt="Banner PestPredict SP" style="max-height: 280px; object-fit: cover;">
+            <img src="pest_predict/static/img/banner.jpg" class="img-fluid w-100" alt="PestPredict SP Banner" style="max-height: 280px; object-fit: cover;">
         </div>
     </div>
-    <!-- Seção Sobre a Plataforma & Demonstração em Vídeo -->
+
+    <!-- About Section & Embedded YouTube Video -->
     <div class="container mb-4">
         <div class="row align-items-center g-4">
 
-            <!-- Lado Esquerdo: Descrição do Projeto -->
+            <!-- Left Side: Platform Description -->
             <div class="col-lg-7">
-                <h3 class="fw-bold text-dark mb-3">Sobre a Plataforma</h3>
+                <h3 class="fw-bold text-dark mb-3">About the Platform</h3>
                 <p class="text-secondary leading-relaxed">
-                    O <strong>PestPredict SP</strong> é um sistema preditivo geoespacial concebido para mapear e antecipar riscos de infestação de pragas urbanas e agrícolas/florestais no Estado de São Paulo.
+                    <strong>PestPredict SP</strong> is a geospatial predictive intelligence system engineered to map and forecast infestation risks for both urban vectors and agricultural/forestry pests across the State of São Paulo.
                 </p>
                 <p class="text-secondary leading-relaxed">
-                    Através do cruzamento de dados meteorológicos em tempo real (temperatura, umidade e pluviosidade acumulada) com fatores ambientais e fenologia das pragas, o modelo calcula a probabilidade e suscetibilidade regional de surtos de espécies como o <em>Tityus serrulatus</em> (escorpião-amarelo), <em>Diatraea saccharalis</em> (broca-da-cana) e pragas da silvicultura.
+                    By cross-referencing real-time weather data (temperature, relative humidity, and accumulated precipitation) with environmental factors and pest phenology, the model calculates regional susceptibility for key species including <em>Tityus serrulatus</em> (yellow scorpion), <em>Diatraea saccharalis</em> (sugarcane borer), and major silviculture pests.
                 </p>
                 <div class="d-flex flex-wrap gap-2 mt-3">
                     <span class="badge bg-dark px-3 py-2">Python (Flask)</span>
@@ -47,23 +48,24 @@
                 </div>
             </div>
 
-            <!-- Lado Direito: Quadro do Vídeo do YouTube -->
+            <!-- Right Side: Video Player Card -->
             <div class="col-lg-5">
                 <div class="card shadow-sm border-0 rounded-3 overflow-hidden">
                     <div class="card-header bg-dark text-white fw-bold py-2 d-flex align-items-center">
-                        <span class="me-2">▶️</span> Demonstração em Vídeo
+                        <span class="me-2">▶️</span> Video Demonstration
                     </div>
                     <div class="card-body p-0">
                         <div class="ratio ratio-16x9">
-                            <iframe src="https://www.youtube.com/embed/1BaRJYVeAzE"
-                                    title="Demonstração PestPredict SP"
+                            <iframe src="https://www.youtube-nocookie.com/embed/1BaRJYVeAzE"
+                                    title="PestPredict SP Demonstration"
                                     frameborder="0"
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    referrerpolicy="strict-origin-when-cross-origin"
                                     allowfullscreen></iframe>
                         </div>
                     </div>
                     <div class="card-footer bg-white text-muted text-center small py-2 border-0">
-                        Apresentação prática das funcionalidades e arquitetura GIS
+                        Practical walkthrough of GIS architecture & predictive capabilities
                     </div>
                 </div>
             </div>
@@ -73,12 +75,12 @@
 
     <div class="container mb-5">
 
-        <!-- Formulário de Filtro -->
+        <!-- Filter Form -->
         <div class="card shadow-sm mb-4 border-0">
             <div class="card-body">
                 <form method="POST" class="row g-3 align-items-end">
                     <div class="col-md-5">
-                        <label class="form-label fw-bold">Município (São Paulo > 100k hab.):</label>
+                        <label class="form-label fw-bold">Municipality (São Paulo > 100k hab.):</label>
                         <select name="city" class="form-select">
                             {% for city in cities %}
                                 <option value="{{ city }}" {% if city == selected_city %}selected{% endif %}>{{ city }}</option>
@@ -87,71 +89,71 @@
                     </div>
 
                     <div class="col-md-5">
-                        <label class="form-label fw-bold">Ambiente / Cultura Agrícola:</label>
+                        <label class="form-label fw-bold">Environment / Agricultural Crop:</label>
                         <select name="env_type" class="form-select">
-                            <optgroup label="Ambientes Urbanos">
-                                <option value="Residência" {% if env_type == 'Residência' %}selected{% endif %}>Residência / Condomínio</option>
-                                <option value="Comércio" {% if env_type == 'Comércio' %}selected{% endif %}>Comércio / Indústria</option>
-                                <option value="Próximo a APP/Córrego" {% if env_type == 'Próximo a APP/Córrego' %}selected{% endif %}>Área Próxima a APP / Córrego</option>
+                            <optgroup label="Urban Environments">
+                                <option value="Residência" {% if env_type == 'Residência' %}selected{% endif %}>Residential / Condominium</option>
+                                <option value="Comércio" {% if env_type == 'Comércio' %}selected{% endif %}>Commercial / Industrial</option>
+                                <option value="Próximo a APP/Córrego" {% if env_type == 'Próximo a APP/Córrego' %}selected{% endif %}>Near Streams / Protected Area</option>
                             </optgroup>
-                            <optgroup label="Setor Florestal & Agrícola">
+                            <optgroup label="Forestry & Agricultural Sector">
                                 <option value="Eucalyptus grandis" {% if env_type == 'Eucalyptus grandis' %}selected{% endif %}>Eucalyptus grandis</option>
                                 <option value="Eucalyptus urograndis" {% if env_type == 'Eucalyptus urograndis' %}selected{% endif %}>Eucalyptus urograndis</option>
                                 <option value="Eucalyptus camaldulensis" {% if env_type == 'Eucalyptus camaldulensis' %}selected{% endif %}>Eucalyptus camaldulensis</option>
-                                <option value="Soja" {% if env_type == 'Soja' %}selected{% endif %}>Cultura de Soja</option>
-                                <option value="Milho" {% if env_type == 'Milho' %}selected{% endif %}>Cultura de Milho</option>
-                                <option value="Cana-de-Açúcar" {% if env_type == 'Cana-de-Açúcar' %}selected{% endif %}>Cana-de-Açúcar</option>
+                                <option value="Soja" {% if env_type == 'Soja' %}selected{% endif %}>Soybean Crop</option>
+                                <option value="Milho" {% if env_type == 'Milho' %}selected{% endif %}>Corn Crop</option>
+                                <option value="Cana-de-Açúcar" {% if env_type == 'Cana-de-Açúcar' %}selected{% endif %}>Sugarcane Crop</option>
                             </optgroup>
                         </select>
                     </div>
 
                     <div class="col-md-2">
-                        <button type="submit" class="btn btn-success w-100 fw-bold">Analisar Risco</button>
+                        <button type="submit" class="btn btn-success w-100 fw-bold">Analyze Risk</button>
                     </div>
                 </form>
             </div>
         </div>
 
         {% if weather %}
-        <!-- Painel Meteorológico Atual -->
+        <!-- Real-Time Weather Metrics Alert -->
         <div class="alert alert-success shadow-sm d-flex justify-content-around text-center mb-4 border-0">
             <div>
-                <small class="text-muted d-block">Localização</small>
+                <small class="text-muted d-block">Location</small>
                 <strong>{{ selected_city }} / SP</strong>
             </div>
             <div>
-                <small class="text-muted d-block">Temperatura Atual</small>
+                <small class="text-muted d-block">Current Temp</small>
                 <strong>{{ weather.temp }} °C</strong>
             </div>
             <div>
-                <small class="text-muted d-block">Umidade do Ar</small>
+                <small class="text-muted d-block">Air Humidity</small>
                 <strong>{{ weather.humidity }} %</strong>
             </div>
             <div>
-                <small class="text-muted d-block">Chuva Acumulada Hoje</small>
+                <small class="text-muted d-block">Accumulated Rain</small>
                 <strong>{{ weather.rain }} mm</strong>
             </div>
         </div>
         {% endif %}
 
-        <!-- Navegação por Abas (Urbano x Agrícola) -->
+        <!-- Tab Navigation (Urban vs Agri) -->
         <ul class="nav nav-tabs mb-4" id="pestTabs" role="tablist">
             <li class="nav-item" role="presentation">
                 <button class="nav-link active fw-bold" id="urban-tab" data-bs-toggle="tab" data-bs-target="#urban" type="button" role="tab">
-                    🏙️ Pragas Urbanas
+                    🏙️ Urban Pests
                 </button>
             </li>
             <li class="nav-item" role="presentation">
                 <button class="nav-link fw-bold" id="agri-tab" data-bs-toggle="tab" data-bs-target="#agri" type="button" role="tab">
-                    🚜 Pragas Agrícolas / Florestais
+                    🚜 Agricultural / Forestry Pests
                 </button>
             </li>
         </ul>
 
-        <!-- Conteúdo das Abas -->
+        <!-- Tab Content -->
         <div class="tab-content" id="pestTabsContent">
 
-            <!-- ABA URBANA -->
+            <!-- URBAN TAB -->
             <div class="tab-pane fade show active" id="urban" role="tabpanel">
                 <div class="row mb-4">
                     {% for item in urban_results %}
@@ -164,12 +166,12 @@
                             onclick="loadUrbanHeatmap('{{ item.key }}', '{{ item.name }}')">
 
                             <div class="card-body">
-                                <span class="badge bg-primary mb-2">Urbana</span>
+                                <span class="badge bg-primary mb-2">Urban</span>
                                 <h5 class="card-title h6">{{ item.name }}</h5>
 
                                 <div class="my-2 text-center">
                                     <span class="display-6 fw-bold">{{ item.score }}%</span>
-                                    <small class="d-block text-muted">Probabilidade</small>
+                                    <small class="d-block text-muted">Probability</small>
                                 </div>
 
                                 <p class="card-text text-center fw-bold mb-1
@@ -179,18 +181,18 @@
                                     {% else %}text-success{% endif %}">
                                     {{ item.level }}
                                 </p>
-                                <small class="text-success d-block text-center mt-2">👇 Clique para ver manchas de incidência no mapa</small>
+                                <small class="text-success d-block text-center mt-2">👇 Click to view incidence map</small>
                             </div>
                         </div>
                     </div>
                     {% endfor %}
                 </div>
 
-                <!-- MAPA DA ABA URBANA -->
+                <!-- URBAN MAP -->
                 <div class="card shadow-sm mb-4 border-0">
                     <div class="card-header bg-dark text-white fw-bold d-flex justify-content-between align-items-center">
-                        <span>🗺️ Manchas de Incidência em Áreas Urbanas (SP)</span>
-                        <span id="urbanPestTitle" class="badge bg-warning text-dark">Clique em uma praga urbana</span>
+                        <span>🗺️ Urban Area Incidence Maps (SP)</span>
+                        <span id="urbanPestTitle" class="badge bg-warning text-dark">Select an urban pest</span>
                     </div>
                     <div class="card-body p-0">
                         <div id="mapUrban" class="map-container" style="height: 480px;"></div>
@@ -198,7 +200,7 @@
                 </div>
             </div>
 
-            <!-- ABA AGRÍCOLA / FLORESTAL -->
+            <!-- AGRI / FORESTRY TAB -->
             <div class="tab-pane fade" id="agri" role="tabpanel">
                 <div class="row mb-4">
                     {% for item in agri_results %}
@@ -211,12 +213,12 @@
                             onclick="loadAgriHeatmap('{{ item.key }}', '{{ item.name }}')">
 
                             <div class="card-body">
-                                <span class="badge bg-success mb-2">Agrícola / Florestal</span>
+                                <span class="badge bg-success mb-2">Agricultural / Forestry</span>
                                 <h5 class="card-title h6">{{ item.name }}</h5>
 
                                 <div class="my-2 text-center">
                                     <span class="display-6 fw-bold">{{ item.score }}%</span>
-                                    <small class="d-block text-muted">Probabilidade</small>
+                                    <small class="d-block text-muted">Probability</small>
                                 </div>
 
                                 <p class="card-text text-center fw-bold mb-1
@@ -226,30 +228,30 @@
                                     {% else %}text-success{% endif %}">
                                     {{ item.level }}
                                 </p>
-                                <small class="text-success d-block text-center mt-2">👇 Clique para ver manchas de incidência no mapa</small>
+                                <small class="text-success d-block text-center mt-2">👇 Click to view incidence map</small>
                             </div>
                         </div>
                     </div>
                     {% endfor %}
                 </div>
 
-                <!-- MAPA DA ABA AGRÍCOLA -->
+                <!-- AGRI MAP -->
                 <div class="card shadow-sm mb-4 border-0">
                     <div class="card-header bg-dark text-white fw-bold d-flex justify-content-between align-items-center">
-                        <span>🌾 Mosaico de Culturas & Manchas de Suscetibilidade Agrícola (SP)</span>
-                        <span id="agriPestTitle" class="badge bg-warning text-dark">Clique em uma praga agrícola</span>
+                        <span>🌾 Crop Mosaic & Agricultural Susceptibility Maps (SP)</span>
+                        <span id="agriPestTitle" class="badge bg-warning text-dark">Select a crop pest</span>
                     </div>
                     <div class="card-body p-0">
                         <div id="mapAgri" class="map-container" style="height: 480px;"></div>
                     </div>
                     <div class="card-footer bg-white d-flex justify-content-around flex-wrap border-0 py-3">
-                        <div><span class="legend-dot" style="background: #1b4332; display:inline-block; width:12px; height:12px; border-radius:50%; margin-right:5px;"></span><strong>Eucalipto</strong></div>
-                        <div><span class="legend-dot" style="background: #2ec4b6; display:inline-block; width:12px; height:12px; border-radius:50%; margin-right:5px;"></span><strong>Cana-de-Açúcar</strong></div>
-                        <div><span class="legend-dot" style="background: #7209b7; display:inline-block; width:12px; height:12px; border-radius:50%; margin-right:5px;"></span><strong>Soja</strong></div>
-                        <div><span class="legend-dot" style="background: #ffb703; display:inline-block; width:12px; height:12px; border-radius:50%; margin-right:5px;"></span><strong>Milho</strong></div>
-                        <div><span class="legend-dot" style="background: #ff9f1c; display:inline-block; width:12px; height:12px; border-radius:50%; margin-right:5px;"></span><strong>Citros</strong></div>
-                        <div><span class="legend-dot" style="background: #6f4e37; display:inline-block; width:12px; height:12px; border-radius:50%; margin-right:5px;"></span><strong>Café</strong></div>
-                        <div><span class="legend-dot" style="background: #2a9d8f; display:inline-block; width:12px; height:12px; border-radius:50%; margin-right:5px;"></span><strong>Hortifrúti / Fruticultura</strong></div>
+                        <div><span class="legend-dot" style="background: #1b4332; display:inline-block; width:12px; height:12px; border-radius:50%; margin-right:5px;"></span><strong>Eucalyptus</strong></div>
+                        <div><span class="legend-dot" style="background: #2ec4b6; display:inline-block; width:12px; height:12px; border-radius:50%; margin-right:5px;"></span><strong>Sugarcane</strong></div>
+                        <div><span class="legend-dot" style="background: #7209b7; display:inline-block; width:12px; height:12px; border-radius:50%; margin-right:5px;"></span><strong>Soybean</strong></div>
+                        <div><span class="legend-dot" style="background: #ffb703; display:inline-block; width:12px; height:12px; border-radius:50%; margin-right:5px;"></span><strong>Corn</strong></div>
+                        <div><span class="legend-dot" style="background: #ff9f1c; display:inline-block; width:12px; height:12px; border-radius:50%; margin-right:5px;"></span><strong>Citrus</strong></div>
+                        <div><span class="legend-dot" style="background: #6f4e37; display:inline-block; width:12px; height:12px; border-radius:50%; margin-right:5px;"></span><strong>Coffee</strong></div>
+                        <div><span class="legend-dot" style="background: #2a9d8f; display:inline-block; width:12px; height:12px; border-radius:50%; margin-right:5px;"></span><strong>Horticulture / Fruit</strong></div>
                     </div>
                 </div>
             </div>
@@ -265,7 +267,7 @@
         var esriTileUrl = 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}';
         var esriAttrib = 'Tiles &copy; Esri &mdash; OpenStreetMap contributors';
 
-        // 1. MAPA URBANO
+        // 1. URBAN MAP
         var mapUrban = L.map('mapUrban').setView([-22.3, -48.5], 7);
         L.tileLayer(esriTileUrl, { attribution: esriAttrib, maxZoom: 18 }).addTo(mapUrban);
 
@@ -278,7 +280,6 @@
                 .then(data => {
                     urbanBaseGroup.clearLayers();
                     data.forEach(item => {
-                        // Na aba urbana, exibimos apenas locais urbanos
                         if (item.crop === "Área Urbana") {
                             L.circle([item.lat, item.lon], {
                                 color: '#6c757d',
@@ -286,7 +287,7 @@
                                 fillOpacity: 0.35,
                                 radius: 22000,
                                 stroke: false
-                            }).bindPopup(`<strong>${item.city}</strong><br>Zona Urbana`).addTo(urbanBaseGroup);
+                            }).bindPopup(`<strong>${item.city}</strong><br>Urban Area`).addTo(urbanBaseGroup);
                         }
                     });
                 });
@@ -294,7 +295,7 @@
         drawUrbanBaseMap();
 
         function loadUrbanHeatmap(pestKey, pestName) {
-            document.getElementById('urbanPestTitle').innerText = 'Incidência: ' + pestName;
+            document.getElementById('urbanPestTitle').innerText = 'Incidence: ' + pestName;
             urbanPestGroup.clearLayers();
 
             fetch('/api/pest_map/' + pestKey)
@@ -310,12 +311,12 @@
                             radius: 18000,
                             stroke: true,
                             weight: 2
-                        }).bindPopup(`<strong>${item.city}</strong><br>Praga: ${pestName}<br>Incidência: <strong>${item.score}%</strong>`).addTo(urbanPestGroup);
+                        }).bindPopup(`<strong>${item.city}</strong><br>Pest: ${pestName}<br>Incidence: <strong>${item.score}%</strong>`).addTo(urbanPestGroup);
                     });
                 });
         }
 
-        // 2. MAPA AGRÍCOLA
+        // 2. AGRICULTURAL MAP
         var mapAgri = L.map('mapAgri').setView([-22.3, -48.5], 7);
         L.tileLayer(esriTileUrl, { attribution: esriAttrib, maxZoom: 18 }).addTo(mapAgri);
 
@@ -328,7 +329,6 @@
                 .then(data => {
                     agriCropGroup.clearLayers();
                     data.forEach(item => {
-                        // FILTRO APLICADO: Ignora "Área Urbana" para ocultar as manchas cinzentas na aba agrícola
                         if (item.crop !== "Área Urbana") {
                             L.circle([item.lat, item.lon], {
                                 color: item.crop_color,
@@ -336,7 +336,7 @@
                                 fillOpacity: 0.55,
                                 radius: 28000,
                                 stroke: false
-                            }).bindPopup(`<strong>${item.city}</strong><br>Pólo Agrícola: <strong>${item.crop}</strong>`).addTo(agriCropGroup);
+                            }).bindPopup(`<strong>${item.city}</strong><br>Agricultural Hub: <strong>${item.crop}</strong>`).addTo(agriCropGroup);
                         }
                     });
                 });
@@ -344,7 +344,7 @@
         drawAgriCropMosaic();
 
         function loadAgriHeatmap(pestKey, pestName) {
-            document.getElementById('agriPestTitle').innerText = 'Incidência: ' + pestName;
+            document.getElementById('agriPestTitle').innerText = 'Incidence: ' + pestName;
             agriPestGroup.clearLayers();
 
             fetch('/api/pest_map/' + pestKey)
@@ -360,12 +360,11 @@
                             radius: 18000,
                             stroke: true,
                             weight: 2
-                        }).bindPopup(`<strong>${item.city}</strong><br>Pólo: ${item.crop}<br>Incidência ${pestName}: <strong>${item.score}%</strong>`).addTo(agriPestGroup);
+                        }).bindPopup(`<strong>${item.city}</strong><br>Hub: ${item.crop}<br>Incidence ${pestName}: <strong>${item.score}%</strong>`).addTo(agriPestGroup);
                     });
                 });
         }
 
-        // Ajuste no redimensionamento dos mapas ao alternar as abas
         document.getElementById('agri-tab').addEventListener('shown.bs.tab', function () {
             mapAgri.invalidateSize();
         });
