@@ -1,119 +1,85 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PestPredict SP - Predictive Pest Intelligence</title>
+    <title>PestPredict SP - Geospatial Predictive Intelligence</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="pest_predict/static/styles.css">
 </head>
 <body class="bg-light">
 
-    <!-- Barra Superior -->
+    <!-- Top Navigation Bar -->
     <nav class="navbar navbar-dark bg-dark shadow py-2">
         <div class="container d-flex align-items-center justify-content-between">
             <a class="navbar-brand d-flex align-items-center fw-bold fs-4" href="#">
-                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo PestPredict SP" height="40" class="d-inline-block align-text-top me-3 bg-white p-1 rounded">
-                PestPredict SP - Predictive Pest Intelligence
+                <img src="pest_predict/static/img/logo.png" alt="PestPredict SP Logo" height="45" class="d-inline-block align-text-top me-3 bg-white p-1 rounded">
+                PestPredict SP
             </a>
-            <span class="badge bg-success fs-6">Projeto de Portfólio</span>
+            <span class="badge bg-success px-3 py-2">Portfolio Project</span>
         </div>
     </nav>
 
-    <!-- Banner Principal -->
+    <!-- Header Banner -->
     <div class="container my-4">
         <div class="card shadow-sm border-0 overflow-hidden">
-            <img src="{{ url_for('static', filename='img/banner.jpg') }}" class="img-fluid w-100" alt="Banner PestPredict SP" style="max-height: 260px; object-fit: cover;">
+            <img src="pest_predict/static/img/banner.jpg" class="img-fluid w-100" alt="PestPredict SP Banner" style="max-height: 280px; object-fit: cover;">
         </div>
     </div>
 
+    <!-- About Platform & Video Demonstration Section -->
     <div class="container mb-5">
+        <div class="row align-items-center g-4">
 
-        <!-- RESUMO DO PROJETO -->
-        <div class="row mb-5 align-items-center">
+            <!-- Left Column: Project Overview -->
             <div class="col-lg-7">
-                <h2 class="fw-bold text-dark mb-3">Sobre a Plataforma</h2>
-                <p class="lead text-secondary">
-                    O <strong>PestPredict SP</strong> é um sistema preditivo geoespacial concebido para mapear e antecipar riscos de infestação de pragas urbanas e agrícolas/florestais no Estado de São Paulo.
+                <h3 class="fw-bold text-dark mb-3">About the Platform</h3>
+                <p class="text-secondary leading-relaxed">
+                    <strong>PestPredict SP</strong> is a geospatial predictive intelligence platform engineered to map and forecast infestation risks for both urban vectors and agricultural/forestry pests across the State of São Paulo, Brazil.
                 </p>
-                <p class="text-muted">
-                    Através do cruzamento de dados meteorológicos em tempo real (temperatura, umidade e pluviosidade acumulada) com fatores ambientais e fenologia das pragas, o modelo calcula a probabilidade e suscetibilidade regional de surtos de espécies como o <em>Tityus serrulatus</em> (escorpião-amarelo), <em>Diatraea saccharalis</em> (broca-da-cana) e pragas da silvicultura.
+                <p class="text-secondary leading-relaxed">
+                    By cross-referencing real-time weather data (temperature, relative humidity, and accumulated precipitation) via the Open-Meteo API with bio-climatic thresholds and pest phenology, the application calculates regional susceptibility for key species such as <em>Tityus serrulatus</em> (yellow scorpion), <em>Diatraea saccharalis</em> (sugarcane borer), and major silviculture pests.
                 </p>
-                <div class="d-flex gap-2 flex-wrap mt-3">
-                    <span class="badge bg-dark p-2 fs-6">Python (Flask)</span>
-                    <span class="badge bg-primary p-2 fs-6">Leaflet.js (GIS)</span>
-                    <span class="badge bg-success p-2 fs-6">Open-Meteo API</span>
-                    <span class="badge bg-warning text-dark p-2 fs-6">Bootstrap 5</span>
+                <div class="d-flex flex-wrap gap-2 mt-3">
+                    <span class="badge bg-dark px-3 py-2">Python (Flask)</span>
+                    <span class="badge bg-primary px-3 py-2">Leaflet.js (GIS)</span>
+                    <span class="badge bg-success px-3 py-2">Open-Meteo API</span>
+                    <span class="badge bg-warning text-dark px-3 py-2">Bootstrap 5</span>
                 </div>
             </div>
 
-            <!-- ÁREA DO VÍDEO EXPLICATIVO -->
-            <div class="col-lg-5 mt-4 mt-lg-0">
-                <div class="card shadow border-0">
-                    <div class="card-header bg-dark text-white fw-bold d-flex align-items-center">
-                        <i class="bi bi-play-circle-fill me-2 text-warning"></i> Demonstração em Vídeo
+            <!-- Right Column: Working Video Embed -->
+            <div class="col-lg-5">
+                <div class="card shadow-sm border-0 rounded-3 overflow-hidden">
+                    <div class="card-header bg-dark text-white fw-bold py-2 d-flex align-items-center">
+                        <span class="me-2">▶️️</span> Video Demonstration
                     </div>
-                    <div class="card-body p-2 bg-black text-center">
-                        <!-- Substitua o src pelo link do seu vídeo do YouTube quando gravar -->
+                    <div class="card-body p-0">
                         <div class="ratio ratio-16x9">
-                            <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Demonstração PestPredict SP" allowfullscreen class="rounded"></iframe>
+                            <iframe src="https://www.youtube-nocookie.com/embed/1BaRJYVeAzE"
+                                    title="PestPredict SP Video Demonstration"
+                                    frameborder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    referrerpolicy="strict-origin-when-cross-origin"
+                                    allowfullscreen></iframe>
                         </div>
                     </div>
-                    <div class="card-footer bg-white text-muted text-center small">
-                        Apresentação prática das funcionalidades e arquitetura GIS
+                    <div class="card-footer bg-white text-muted text-center small py-2 border-0">
+                        Practical walkthrough of GIS architecture & predictive capabilities
                     </div>
                 </div>
             </div>
+
         </div>
-
-        <hr class="my-5">
-
-        <!-- ARQUITETURA E FUNCIONAMENTO -->
-        <h3 class="fw-bold mb-4 text-center">Como Funciona a Inteligência Preditiva</h3>
-
-        <div class="row g-4 mb-5">
-            <div class="col-md-4">
-                <div class="card h-100 border-0 shadow-sm text-center p-4">
-                    <div class="display-4 text-primary mb-2"><i class="bi bi-cloud-sun"></i></div>
-                    <h5 class="fw-bold">1. Coleta Meteorológica</h5>
-                    <p class="text-muted small mb-0">Consumo automatizado de dados climáticos em tempo real via Open-Meteo API para municípios polos do Estado de São Paulo.</p>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card h-100 border-0 shadow-sm text-center p-4">
-                    <div class="display-4 text-warning mb-2"><i class="bi bi-cpu"></i></div>
-                    <h5 class="fw-bold">2. Matriz Bioclimática</h5>
-                    <p class="text-muted small mb-0">Algoritmo em Python que cruza limites de temperatura, umidade e biologia reprodutiva da espécie com o tipo de ambiente ou cultura agrícola.</p>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card h-100 border-0 shadow-sm text-center p-4">
-                    <div class="display-4 text-success mb-2"><i class="bi bi-geo-alt"></i></div>
-                    <h5 class="fw-bold">3. Renderização GIS</h5>
-                    <p class="text-muted small mb-0">Mapeamento dinâmico em Leaflet.js exibindo o mosaico de culturas e manchas de suscetibilidade sobrepostas no mapa estadual.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- DESTAQUES TÉCNICOS -->
-        <div class="card bg-dark text-white p-4 shadow border-0 mb-5">
-            <h4 class="fw-bold text-warning mb-3">Destaques da Implementação</h4>
-            <ul class="mb-0">
-                <li class="mb-2"><strong>Separação por Setores:</strong> Módulos independentes para Pragas Urbanas e Pragas Agrícolas/Florestais.</li>
-                <li class="mb-2"><strong>Mosaico Regional:</strong> Mapeamento característico das culturas predominantes de SP (Eucalipto, Cana, Soja, Milho, Citros e Áreas Urbanas).</li>
-                <li class="mb-2"><strong>Visualização em Manchas:</strong> Renderização de manchas de incidência com opacidade sobreposta às bases territoriais.</li>
-                <li><strong>Proteção de Propriedade Intelectual:</strong> Foco na apresentação do prognóstico geoespacial e potencial analítico do software.</li>
-            </ul>
-        </div>
-
     </div>
 
-    <footer class="bg-dark text-white-50 py-4 text-center">
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center py-3">
         <div class="container">
-            <small>PestPredict SP &copy; 2026 — Predictive Pest Intelligence</small>
+            <small>PestPredict SP &copy; 2026 — Environmental Data Science & Pest Intelligence Portfolio</small>
         </div>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
