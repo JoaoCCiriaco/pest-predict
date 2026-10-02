@@ -26,6 +26,50 @@
             <img src="{{ url_for('static', filename='img/banner.jpg') }}" class="img-fluid w-100" alt="Banner PestPredict SP" style="max-height: 280px; object-fit: cover;">
         </div>
     </div>
+    <!-- Seção Sobre a Plataforma & Demonstração em Vídeo -->
+    <div class="container mb-4">
+        <div class="row align-items-center g-4">
+
+            <!-- Lado Esquerdo: Descrição do Projeto -->
+            <div class="col-lg-7">
+                <h3 class="fw-bold text-dark mb-3">Sobre a Plataforma</h3>
+                <p class="text-secondary leading-relaxed">
+                    O <strong>PestPredict SP</strong> é um sistema preditivo geoespacial concebido para mapear e antecipar riscos de infestação de pragas urbanas e agrícolas/florestais no Estado de São Paulo.
+                </p>
+                <p class="text-secondary leading-relaxed">
+                    Através do cruzamento de dados meteorológicos em tempo real (temperatura, umidade e pluviosidade acumulada) com fatores ambientais e fenologia das pragas, o modelo calcula a probabilidade e suscetibilidade regional de surtos de espécies como o <em>Tityus serrulatus</em> (escorpião-amarelo), <em>Diatraea saccharalis</em> (broca-da-cana) e pragas da silvicultura.
+                </p>
+                <div class="d-flex flex-wrap gap-2 mt-3">
+                    <span class="badge bg-dark px-3 py-2">Python (Flask)</span>
+                    <span class="badge bg-primary px-3 py-2">Leaflet.js (GIS)</span>
+                    <span class="badge bg-success px-3 py-2">Open-Meteo API</span>
+                    <span class="badge bg-warning text-dark px-3 py-2">Bootstrap 5</span>
+                </div>
+            </div>
+
+            <!-- Lado Direito: Quadro do Vídeo do YouTube -->
+            <div class="col-lg-5">
+                <div class="card shadow-sm border-0 rounded-3 overflow-hidden">
+                    <div class="card-header bg-dark text-white fw-bold py-2 d-flex align-items-center">
+                        <span class="me-2">▶️</span> Demonstração em Vídeo
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="ratio ratio-16x9">
+                            <iframe src="https://www.youtube.com/embed/1BaRJYVeAzE"
+                                    title="Demonstração PestPredict SP"
+                                    frameborder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowfullscreen></iframe>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white text-muted text-center small py-2 border-0">
+                        Apresentação prática das funcionalidades e arquitetura GIS
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
 
     <div class="container mb-5">
 
